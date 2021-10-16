@@ -53,18 +53,24 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    float addDelay(int channel, float inputSample);
+    float processDelay(int channel, float inputSample);
     
     static juce::AudioProcessorValueTreeState::ParameterLayout getParameterLayout();
 
     juce::AudioProcessorValueTreeState apvts {*this, nullptr, "Parameters", getParameterLayout()};
 
 private:
-    int sRate { 44100 };
-
-    juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::Linear> delayLine {44100};
-
-    juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> smoother;
+    double sRate { 44100 };
+    
+    float delayTime, delayFeedback, delayWetLevel, delayDryLevel;
+    float delaySignal;
+    
+    float delayTimeSmoothed [2];
+    
+    using delayLine = juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::Linear>;
+    
+    delayLine delayLines [2] { delayLine(44100), delayLine(44100) };
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JuceDelayV2AudioProcessor)
 };
