@@ -65,9 +65,9 @@
           uiLastY_Normal="-63" uiopen_Normal="0">
     <PLUGIN name="JuceDelayV2" format="VST3" category="Fx" manufacturer="yourcompany"
             version="1.0.0" file="/Users/mattaiken/Library/Audio/Plug-Ins/VST3/JuceDelayV2.vst3"
-            uniqueId="fea5d522" isInstrument="0" fileTime="17c76bc1e51" infoUpdateTime="17c7b5a7627"
+            uniqueId="fea5d522" isInstrument="0" fileTime="17c76bc1e51" infoUpdateTime="17c891920ac"
             numInputs="2" numOutputs="2" isShell="0" uid="acfaa79b"/>
-    <STATE>411.VMjLgHY....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9HiLz3BTEwlXmAiUYoWUrIVdA4hKAAkKTETRUAUSAAkKBolQY4BQPETQPoFUYEjYic1cVM1ZAAkKIAkKt3hKt3hKt3hQtLjKTETRUAUSAAkKBolQY4BQlITQXQUTEEkZPETS5IkKXcEVxU0UY4BQPIDQt3hKt3BREQGY47jKtTETRUDUS4BQl4xaQYjKAgETAQ0ZTMUQAY1XmcmUisVPP4RRP4hKt3hKt3hKJElKA4BUAkTUP0TPP4hPpYTVtPDTAUjXUEEUAY1XmcmUisVPP4RRP4hKt3hKt3hKtXjKC4hKt3hKt3hKt3hKtQUUCUEQTg2ZrM1YQcUVDUjQicVPP4RPHQEY1UTLhkWPP4RPL4hKi4hKt3hKt3hKtXlTU0DUQAURWoULEYzXqEEUXoWQFwyKIMzasA2atUlaz4COuX0TTMCTrU2Yo41TzEFck4C.</STATE>
+    <STATE>411.VMjLgHY....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9HiLz3BTEwlXmAiUYoWUrIVdA4hKAAkKTETRUAUSAAkKBolQY4BQPETQPoFUYEjYic1cVM1ZAAkKIAkKt3hKt3hKt3hQtLjKTETRUAUSAAkKBolQY4BQlITQXQUTEEkZPETS5IkKXcEVxU0UY4BQPIDQt3hKt3hRhgCR47jKtTETRUDUS4BQl4xaQYjKAgETAQ0ZTMUQAY1XmcmUisVPP4RRP4hKt3hKt3hKHIlKA4BUAkTUP0TPP4hPpYTVtPDTAUjXUEEUAY1XmcmUisVPP4RRP4hKt3hKt3hKtXjKC4hKt3hKt3hKt3hKtQUUCUEQTg2ZrM1YQcUVDUjQicVPP4RPHQEY1UTLhkWPP4RPL4hKi4hKt3hKt3hKtXlTU0DUQAURWoULEYzXqEEUXoWQFwyKIMzasA2atUlaz4COuX0TTMCTrU2Yo41TzEFck4C.</STATE>
     <LAYOUT>
       <INPUTS>
         <BUS index="0" layout="L R"/>
@@ -78,10 +78,10 @@
     </LAYOUT>
   </FILTER>
   <FILTER uid="6" x="0.51625" y="0.2692307692307692" uiLastX_Normal="194"
-          uiLastY_Normal="218" uiopen_Normal="0">
+          uiLastY_Normal="218" uiopen_Normal="1">
     <PLUGIN name="AUAudioFilePlayer" format="AudioUnit" category="Generator"
             manufacturer="Apple" version="1.6.0" file="AudioUnit:Generators/augn,afpl,appl"
-            uniqueId="6163676e" isInstrument="0" fileTime="0" infoUpdateTime="17c7b5a7627"
+            uniqueId="6163676e" isInstrument="0" fileTime="0" infoUpdateTime="17c891920ac"
             numInputs="0" numOutputs="2" isShell="0" uid="6163676e"/>
     <STATE>572.hAGaoMGcv.C1AHv.DTfAGfPBJr.Gc3wGgvUag4VclE1XzUmbkIGUjEFcg8EDarVPUAkbkMWYzAUYxMWZyQWYtQ2TzEFcksTY4c0b0IFc4AWYWYWYxMWZu4FUzkGbk8EDOXVZrUVKxUlYkIWYtMVYyQkag0VYRDFbvwFPgxvzM3vCPDQFXYTZrUlSg0VYWIUYmk1atMmWIM2TkwVYiQWYjYTZrU1WP3zKUMWYxM2KsEFczEVZqUlauPza24FauEFYy8hR0wVZg4FHLE1Yk8RPxMFaocFZz8hR0wVZg4FHLE1YkARKf.yLt.hSuMFc0Imak4RavMSnRP8DTTgEWfQFZ3kTkcVZu4FQuU1bL81avokTkcVZu4FQgQWXeAADIM2TkwVYiQWYjIUYmk1atokTkcVZu4lSg0VYH7DDvA............OlZM4e...nu38...F...FP2E..fA..fbDlA..X....vioVS9G....7Xp0j+A..A................................................................Heg......PBZ4TY2AhTkcVZu4VBRDlYvwFD.HQX0claQCBDVYTZrUFHwfUUtQWZzwVYjA.B.jA.l.vJ.jD.QAPV.3E.vAPc.nG.6APe.PH.MBPk.PJ.0Cv8A.P.ODfFAzR.3DPNAvZ.sF.tAja.9F.vATb.HGvy........BD..........h...................AfM</STATE>
     <LAYOUT>
