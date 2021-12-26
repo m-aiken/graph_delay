@@ -188,7 +188,7 @@ void JuceDelayV2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     }
 }
 
-float JuceDelayV2AudioProcessor::processDelay(int channel, float inputSample)
+float JuceDelayV2AudioProcessor::processDelay(int& channel, float& inputSample)
 {
     auto delaySample = delayLines[channel].popSample (channel, static_cast<int> (sRate * (delayTimeSmoothed[channel] / 1000.f)));
 
