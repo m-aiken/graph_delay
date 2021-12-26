@@ -24,7 +24,7 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
     
-    void addControlLabel (juce::Slider &slider, juce::Label &label, const juce::String &labelText);
+    void addUIComponent(juce::Slider& slider, juce::Label& label, const juce::String& labelText, const juce::String& sliderStyle);
 
 private:
     // This reference is provided as a quick way for your editor to
