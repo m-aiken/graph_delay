@@ -95,10 +95,10 @@ void JuceDelayV2AudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     sRate = sampleRate;
     
-    delayTime     = apvts.getRawParameterValue ("TIME")->load();
-    delayFeedback = apvts.getRawParameterValue ("FEEDBACK")->load();
-    delayWetLevel = apvts.getRawParameterValue ("WET")->load();
-    delayDryLevel = apvts.getRawParameterValue ("DRY")->load();
+    delayTime     = apvts.getRawParameterValue("TIME")->load();
+    delayFeedback = apvts.getRawParameterValue("FEEDBACK")->load();
+    delayWetLevel = apvts.getRawParameterValue("WET")->load();
+    delayDryLevel = apvts.getRawParameterValue("DRY")->load();
     
     juce::dsp::ProcessSpec spec;
     spec.sampleRate       = sampleRate;
@@ -107,7 +107,7 @@ void JuceDelayV2AudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     
     for (int i = 0; i < 2; ++i)
     {
-        delayTimeSmoothed[i] = 0.001;
+        delayTimeSmoothed[i].reset(sampleRate, 0.01);
         
         delayLines[i].reset();
         delayLines[i].prepare(spec);
@@ -174,13 +174,14 @@ void JuceDelayV2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     
         for (int i = 0; i < buffer.getNumSamples(); ++i)
         {
-            delayTime     = apvts.getRawParameterValue ("TIME")->load();
-            delayFeedback = apvts.getRawParameterValue ("FEEDBACK")->load();
-            delayWetLevel = juce::Decibels::decibelsToGain (apvts.getRawParameterValue ("WET")->load());
-            delayDryLevel = juce::Decibels::decibelsToGain (apvts.getRawParameterValue ("DRY")->load());
-           
-            delayTimeSmoothed[channel] = delayTimeSmoothed[channel] - 0.001 * (delayTimeSmoothed[channel] - delayTime);
+            delayTime     = apvts.getRawParameterValue("TIME")->load();
+            delayFeedback = apvts.getRawParameterValue("FEEDBACK")->load();
+            delayWetLevel = juce::Decibels::decibelsToGain(apvts.getRawParameterValue("WET")->load());
+            delayDryLevel = juce::Decibels::decibelsToGain(apvts.getRawParameterValue("DRY")->load());
             
+            delayTimeSmoothed[channel].setTargetValue(delayTime);
+            delayTime = delayTimeSmoothed[channel].getNextValue();
+                       
             delaySignal = processDelay(channel, channelDataWrite[i]);
             
             channelDataWrite[i] = (channelDataWrite[i] * delayDryLevel) + (delaySignal * delayWetLevel);
@@ -190,11 +191,9 @@ void JuceDelayV2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
 
 float JuceDelayV2AudioProcessor::processDelay(int& channel, float& inputSample)
 {
-    auto delaySample = delayLines[channel].popSample (channel, static_cast<int> (sRate * (delayTimeSmoothed[channel] / 1000.f)));
-
-    auto delayLineInputSample = std::tanh (inputSample + delayFeedback * delaySample);
-
-    delayLines[channel].pushSample (channel, delayLineInputSample);
+    auto delaySample = delayLines[channel].popSample(channel, static_cast<int>( (sRate * delayTime) / 1000.f ) );
+    
+    delayLines[channel].pushSample(channel, std::tanh(inputSample + delayFeedback * delaySample));
 
     return delaySample;
 }
