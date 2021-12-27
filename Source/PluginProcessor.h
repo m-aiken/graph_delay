@@ -65,7 +65,8 @@ private:
     float delayTime, delayFeedback, delayWetLevel, delayDryLevel;
     float delaySignal;
     
-    juce::LinearSmoothedValue<float> delayTimeSmoothed [2] { juce::LinearSmoothedValue<float>(0.f), juce::LinearSmoothedValue<float>(0.f) };
+    using smoother = juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>;
+    smoother delayTimeSmoothed [2] { smoother(0.f), smoother(0.f) };
     
     using delayLine = juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::Linear>;
     
