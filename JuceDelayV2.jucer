@@ -4,6 +4,9 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" cppLanguageStandard="17">
   <MAINGROUP id="vJz0Bz" name="JuceDelayV2">
     <GROUP id="{8387E920-8EB5-6B0F-46C2-675180B5753C}" name="Source">
+      <FILE id="HpslAV" name="RotaryControl.cpp" compile="1" resource="0"
+            file="Source/RotaryControl.cpp"/>
+      <FILE id="jzgswu" name="RotaryControl.h" compile="0" resource="0" file="Source/RotaryControl.h"/>
       <FILE id="t19AOH" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="AK4T1y" name="PluginProcessor.h" compile="0" resource="0"
