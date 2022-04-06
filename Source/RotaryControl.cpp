@@ -15,18 +15,18 @@ RotaryControl::RotaryControl(const juce::String& labelText, const double& rangeM
 {
     addAndMakeVisible(rotary);
     rotary.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    rotary.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, false, 50, 20);
+    rotary.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
     rotary.setRange(rangeMin, rangeMax);
-    rotary.setNumDecimalPlacesToDisplay(2);
     
     addAndMakeVisible(label);
     label.setText(labelText, juce::dontSendNotification);
     label.setJustificationType(juce::Justification::centred);
+    label.setFont(juce::Font(juce::Font::getDefaultMonospacedFontName(), 14.f, 0));
 }
 
 void RotaryControl::paint(juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::black);
+//    g.fillAll(juce::Colours::blue);
 }
 
 void RotaryControl::resized()
@@ -37,7 +37,7 @@ void RotaryControl::resized()
     juce::Grid grid;
 
     grid.autoColumns = Track(Fr (1));
-    grid.templateRows = { Track(Fr (5)), Track(Fr (1)) };
+    grid.templateRows = { Track(Fr (4)), Track(Fr (1)) };
     
     grid.items =
     {

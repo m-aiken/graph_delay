@@ -18,6 +18,8 @@ JuceDelayV2AudioProcessorEditor::JuceDelayV2AudioProcessorEditor (JuceDelayV2Aud
     addAndMakeVisible(wetRotary);
     addAndMakeVisible(dryRotary);
     
+    addAndMakeVisible(xyPad);
+    
     timeRotary.getValueObject().referTo     (audioProcessor.apvts.getParameterAsValue("TIME"));
     feedbackRotary.getValueObject().referTo (audioProcessor.apvts.getParameterAsValue("FEEDBACK"));
     wetRotary.getValueObject().referTo      (audioProcessor.apvts.getParameterAsValue("WET"));
@@ -36,19 +38,25 @@ JuceDelayV2AudioProcessorEditor::~JuceDelayV2AudioProcessorEditor()
 void JuceDelayV2AudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (juce::Colours::red);
+    g.fillAll (juce::Colours::black);
 }
 
 void JuceDelayV2AudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-    auto bounds      = getLocalBounds();
-    int rotaryWidth  = 100;
-    int rotaryHeight = bounds.getHeight() / 2;
+    auto bounds       = getLocalBounds();
+    auto width        = bounds.getWidth();
+    auto bottom       = bounds.getBottom();
+    auto padding      = 20;
+    auto rotaryWidth  = 100;
+    auto rotaryHeight = (bounds.getHeight() / 3);
     
-    timeRotary.setBounds     (0,                               0,            rotaryWidth, rotaryHeight);
-    feedbackRotary.setBounds (0,                               rotaryHeight, rotaryWidth, rotaryHeight);
-    dryRotary.setBounds      (bounds.getWidth() - rotaryWidth, 0,            rotaryWidth, rotaryHeight);
-    wetRotary.setBounds      (bounds.getWidth() - rotaryWidth, rotaryHeight, rotaryWidth, rotaryHeight);
+    timeRotary.setBounds     (padding,                       padding * 2,                           rotaryWidth, rotaryHeight);
+    feedbackRotary.setBounds (padding,                       bottom - (padding * 2) - rotaryHeight, rotaryWidth, rotaryHeight);
+    dryRotary.setBounds      (width - rotaryWidth - padding, padding * 2,                           rotaryWidth, rotaryHeight);
+    wetRotary.setBounds      (width - rotaryWidth - padding, bottom - (padding * 2) - rotaryHeight, rotaryWidth, rotaryHeight);
+    
+    auto xyPadDims = dryRotary.getX() - timeRotary.getRight() - (padding * 2);
+    xyPad.setBounds(timeRotary.getRight() + padding, bounds.getCentreY() - (xyPadDims / 2), xyPadDims, xyPadDims);
 }
