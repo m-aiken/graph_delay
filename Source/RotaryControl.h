@@ -11,16 +11,15 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "CustomLookAndFeel.h"
 
 //==============================================================================
-struct RotaryControl : juce::Component
+struct RotaryControl : juce::Slider
 {
-    RotaryControl(const juce::String& labelText, const double& rangeMin, const double& rangeMax);
+    RotaryControl(const double& rangeMin, const double& rangeMax);
+    ~RotaryControl() { setLookAndFeel(nullptr); }
     void paint (juce::Graphics&) override;
-    void resized() override;
-    juce::Value& getValueObject() { return rotary.getValueObject(); }
     
 private:
-    juce::Slider rotary;
-    juce::Label label;
+    CustomLookAndFeel lnf;
 };

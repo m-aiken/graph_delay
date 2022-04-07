@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "ColourMap.h"
 
 //==============================================================================
 struct XYPad : juce::Component

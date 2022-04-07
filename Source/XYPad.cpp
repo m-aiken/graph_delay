@@ -13,7 +13,7 @@
 //==============================================================================
 void XYPad::paint(juce::Graphics& g)
 {
-//    g.fillAll(juce::Colours::darkgrey);
+    g.fillAll(ColourMap::getColour(ColourMap::Green).withAlpha(0.1f));
     g.drawImage(this->canvas, getLocalBounds().toFloat());
 }
 
@@ -25,7 +25,7 @@ void XYPad::resized()
     juce::Graphics g(canvas);
     
     auto dot = bounds.getWidth() / 20;
-    g.setColour(juce::Colours::lightblue.withAlpha(0.2f));
+    g.setColour(ColourMap::getColour(ColourMap::Blue).withAlpha(0.2f));
     for (auto x = 1; x < 20; ++x)
     {
         for (auto y = 1; y < 20; ++y)

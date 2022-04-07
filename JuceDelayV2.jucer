@@ -4,6 +4,11 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" cppLanguageStandard="17">
   <MAINGROUP id="vJz0Bz" name="JuceDelayV2">
     <GROUP id="{8387E920-8EB5-6B0F-46C2-675180B5753C}" name="Source">
+      <FILE id="FiNQ8b" name="CustomLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/CustomLookAndFeel.cpp"/>
+      <FILE id="RyTkLV" name="CustomLookAndFeel.h" compile="0" resource="0"
+            file="Source/CustomLookAndFeel.h"/>
+      <FILE id="DyZTRD" name="ColourMap.h" compile="0" resource="0" file="Source/ColourMap.h"/>
       <FILE id="KY0JIl" name="XYPad.cpp" compile="1" resource="0" file="Source/XYPad.cpp"/>
       <FILE id="C5HE2l" name="XYPad.h" compile="0" resource="0" file="Source/XYPad.h"/>
       <FILE id="HpslAV" name="RotaryControl.cpp" compile="1" resource="0"
