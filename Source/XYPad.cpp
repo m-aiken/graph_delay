@@ -11,10 +11,26 @@
 #include "XYPad.h"
 
 //==============================================================================
+void Thumb::paint(juce::Graphics& g)
+{
+    g.setColour(ColourMap::getColour(ColourMap::Salmon));
+    g.fillEllipse(getLocalBounds().toFloat());
+}
+
+//==============================================================================
+XYPad::XYPad()
+{
+    addAndMakeVisible(thumb);
+}
+
 void XYPad::paint(juce::Graphics& g)
 {
     g.fillAll(ColourMap::getColour(ColourMap::Green).withAlpha(0.1f));
     g.drawImage(this->canvas, getLocalBounds().toFloat());
+    
+    auto thumbDiameter = 20;
+    auto offsetCentre = getLocalBounds().getCentreX() - (thumbDiameter / 2);
+    thumb.setBounds(offsetCentre, offsetCentre, thumbDiameter, thumbDiameter);
 }
 
 void XYPad::resized()
