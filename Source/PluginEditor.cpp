@@ -35,6 +35,13 @@ JuceDelayV2AudioProcessorEditor::JuceDelayV2AudioProcessorEditor (JuceDelayV2Aud
     wetRotary.getValueObject().referTo      (audioProcessor.apvts.getParameterAsValue("WET"));
     dryRotary.getValueObject().referTo      (audioProcessor.apvts.getParameterAsValue("DRY"));
     
+    xyPad.getThumbXValue().referTo          (audioProcessor.apvts.getParameterAsValue("TIME"));
+    xyPad.getThumbYValue().referTo          (audioProcessor.apvts.getParameterAsValue("FEEDBACK"));
+    
+    timeRotary.onValueChange     = [this] { xyPad.repaint(); };
+    feedbackRotary.onValueChange = [this] { xyPad.repaint(); };
+    
+    
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (600, 400);

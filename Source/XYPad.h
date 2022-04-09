@@ -14,20 +14,30 @@
 #include "ColourMap.h"
 
 //==============================================================================
+struct Canvas : juce::Component
+{
+    void paint(juce::Graphics& g) override;
+};
+
+//==============================================================================
 struct Thumb : juce::Component
 {
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics& g) override;
+    juce::Value& getXValue() { return xValue; };
+    juce::Value& getYValue() { return yValue; };
+private:
+    juce::Value xValue, yValue;
 };
 
 //==============================================================================
 struct XYPad : juce::Component
 {
     XYPad();
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    
+    juce::Value& getThumbXValue() { return thumb.getXValue(); };
+    juce::Value& getThumbYValue() { return thumb.getYValue(); };
 private:
-    juce::Image canvas;
-    
+    Canvas canvas;
     Thumb thumb;
 };

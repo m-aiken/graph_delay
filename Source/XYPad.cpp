@@ -11,6 +11,23 @@
 #include "XYPad.h"
 
 //==============================================================================
+void Canvas::paint(juce::Graphics& g)
+{
+    g.fillAll(ColourMap::getColour(ColourMap::Green).withAlpha(0.1f));
+    
+    auto matrixDims = 20;
+    auto coord = getLocalBounds().getWidth() / matrixDims;
+    g.setColour(ColourMap::getColour(ColourMap::Blue).withAlpha(0.2f));
+    for (auto x = 1; x < matrixDims; ++x)
+    {
+        for (auto y = 1; y < matrixDims; ++y)
+        {
+            g.drawRect((coord * x) - 1, (coord * y) - 1, 2, 2);
+        }
+    }
+}
+
+//==============================================================================
 void Thumb::paint(juce::Graphics& g)
 {
     g.setColour(ColourMap::getColour(ColourMap::Salmon));
@@ -20,34 +37,25 @@ void Thumb::paint(juce::Graphics& g)
 //==============================================================================
 XYPad::XYPad()
 {
+    addAndMakeVisible(canvas);
     addAndMakeVisible(thumb);
 }
 
 void XYPad::paint(juce::Graphics& g)
 {
-    g.fillAll(ColourMap::getColour(ColourMap::Green).withAlpha(0.1f));
-    g.drawImage(this->canvas, getLocalBounds().toFloat());
+    auto bounds = getLocalBounds();
+    auto xScaled = juce::jmap<float>(getThumbXValue().getValue(), 0.f, 1000.f, 0, bounds.getWidth());
+    auto yScaled = juce::jmap<float>(getThumbYValue().getValue(), 0.f, 1.f, bounds.getHeight(), 0);
     
     auto thumbDiameter = 20;
-    auto offsetCentre = getLocalBounds().getCentreX() - (thumbDiameter / 2);
-    thumb.setBounds(offsetCentre, offsetCentre, thumbDiameter, thumbDiameter);
+    auto thumbBounds = juce::Rectangle<int>(std::floor(xScaled) - (thumbDiameter / 2), std::floor(yScaled) - (thumbDiameter / 2), thumbDiameter, thumbDiameter);
+    thumb.setBounds(thumbBounds);
+    
+    auto shadow = juce::DropShadow(ColourMap::getColour(ColourMap::Salmon), 20, juce::Point<int>(0, 0));
+    shadow.drawForRectangle(g, thumbBounds);
 }
 
 void XYPad::resized()
 {
-    auto bounds = getLocalBounds();
-    canvas = juce::Image(juce::Image::RGB, bounds.getWidth(), bounds.getHeight(), true);
-    
-    juce::Graphics g(canvas);
-    
-    auto dot = bounds.getWidth() / 20;
-    g.setColour(ColourMap::getColour(ColourMap::Blue).withAlpha(0.2f));
-    for (auto x = 1; x < 20; ++x)
-    {
-        for (auto y = 1; y < 20; ++y)
-        {
-            g.drawRect((dot * x) - 1, (dot * y) - 1, 2, 2);
-        }
-        
-    }
+    canvas.setBounds(getLocalBounds());
 }
