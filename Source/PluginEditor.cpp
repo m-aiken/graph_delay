@@ -35,7 +35,6 @@ JuceDelayV2AudioProcessorEditor::JuceDelayV2AudioProcessorEditor (JuceDelayV2Aud
     wetRotary.getValueObject().referTo      (audioProcessor.apvts.getParameterAsValue("WET"));
     dryRotary.getValueObject().referTo      (audioProcessor.apvts.getParameterAsValue("DRY"));
     
-    
     xyPad.getXValue().referTo               (audioProcessor.apvts.getParameterAsValue("TIME"));
     xyPad.getYValue().referTo               (audioProcessor.apvts.getParameterAsValue("FEEDBACK"));
     
@@ -79,8 +78,8 @@ void JuceDelayV2AudioProcessorEditor::resized()
     wetLabel.setBounds      (wetRotary.getX(),      wetRotary.getBottom(),      rotaryXY, labelHeight);
     dryLabel.setBounds      (dryRotary.getX(),      dryRotary.getBottom(),      rotaryXY, labelHeight);
     
-    auto xyPadDims = dryRotary.getX() - timeRotary.getRight() - (padding * 2);
-    xyPad.setBounds(timeRotary.getRight() + padding, bounds.getCentreY() - (xyPadDims / 2), xyPadDims, xyPadDims);
+    auto xyPadDims = 320;
+    xyPad.setBounds(bounds.getCentreX() - (xyPadDims / 2), bounds.getCentreY() - (xyPadDims / 2), xyPadDims, xyPadDims);
 }
 
 void JuceDelayV2AudioProcessorEditor::formatLabel(juce::Label& label, const juce::String& labelText)

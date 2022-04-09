@@ -45,17 +45,19 @@ void Overlay::paint(juce::Graphics& g)
     auto bounds = getLocalBounds();
     setBounds(bounds);
     
-    auto xScaled = juce::jmap<float>(xValue.getValue(), 0.f, 1000.f, 0, bounds.getWidth());
-    auto yScaled = juce::jmap<float>(yValue.getValue(), 0.f, 1.f, bounds.getHeight(), 0);
+    auto delta = 20;
+    auto thumbArea = bounds.reduced(delta);
+    auto xScaled = juce::jmap<float>(xValue.getValue(), 0.f, 1000.f, 0, thumbArea.getWidth());
+    auto yScaled = juce::jmap<float>(yValue.getValue(), 0.f, 1.f, thumbArea.getHeight(), 0);
     
     auto thumbDiameter = 20;
-    auto thumbBounds = juce::Rectangle<int>(std::floor(xScaled) - (thumbDiameter / 2),
-                                            std::floor(yScaled) - (thumbDiameter / 2),
+    auto thumbBounds = juce::Rectangle<int>(std::floor(xScaled) - (thumbDiameter / 2) + delta,
+                                            std::floor(yScaled) - (thumbDiameter / 2) + delta,
                                             thumbDiameter,
                                             thumbDiameter);
     thumb.setBounds(thumbBounds);
     
-    auto shadow = juce::DropShadow(ColourMap::getColour(ColourMap::Salmon), 20, juce::Point<int>(0, 0));
+    auto shadow = juce::DropShadow(ColourMap::getColour(ColourMap::Salmon).withAlpha(0.6f), 15, juce::Point<int>(0, 0));
     shadow.drawForRectangle(g, thumbBounds);
 }
 
@@ -82,6 +84,6 @@ XYContainer::XYContainer()
 void XYContainer::resized()
 {
     auto bounds = getLocalBounds();
-    canvas.setBounds(bounds);
+    canvas.setBounds(bounds.reduced(20));
     overlay.setBounds(bounds);
 }
