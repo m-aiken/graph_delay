@@ -23,21 +23,30 @@ struct Canvas : juce::Component
 struct Thumb : juce::Component
 {
     void paint(juce::Graphics& g) override;
+};
+
+//==============================================================================
+struct Overlay : juce::Component
+{
+    Overlay();
+    void paint(juce::Graphics& g) override;
+    void mouseDrag(const juce::MouseEvent& event) override;
     juce::Value& getXValue() { return xValue; };
     juce::Value& getYValue() { return yValue; };
 private:
     juce::Value xValue, yValue;
+    Thumb thumb;
 };
 
 //==============================================================================
-struct XYPad : juce::Component
+struct XYContainer : juce::Component
 {
-    XYPad();
-    void paint(juce::Graphics& g) override;
+    XYContainer();
     void resized() override;
-    juce::Value& getThumbXValue() { return thumb.getXValue(); };
-    juce::Value& getThumbYValue() { return thumb.getYValue(); };
+    
+    juce::Value& getXValue() { return overlay.getXValue(); };
+    juce::Value& getYValue() { return overlay.getYValue(); };
 private:
     Canvas canvas;
-    Thumb thumb;
+    Overlay overlay;
 };

@@ -41,7 +41,7 @@ private:
     
     juce::Label timeLabel, feedbackLabel, wetLabel, dryLabel;
     
-    XYPad xyPad;
+    XYContainer xyPad;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JuceDelayV2AudioProcessorEditor)
 };

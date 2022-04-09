@@ -23,7 +23,7 @@ JuceDelayV2AudioProcessorEditor::JuceDelayV2AudioProcessorEditor (JuceDelayV2Aud
     addAndMakeVisible(wetLabel);
     addAndMakeVisible(dryLabel);
     
-    formatLabel(timeLabel, "Delay Time");
+    formatLabel(timeLabel, "Time");
     formatLabel(feedbackLabel, "Feedback");
     formatLabel(wetLabel, "Wet");
     formatLabel(dryLabel, "Dry");
@@ -35,12 +35,12 @@ JuceDelayV2AudioProcessorEditor::JuceDelayV2AudioProcessorEditor (JuceDelayV2Aud
     wetRotary.getValueObject().referTo      (audioProcessor.apvts.getParameterAsValue("WET"));
     dryRotary.getValueObject().referTo      (audioProcessor.apvts.getParameterAsValue("DRY"));
     
-    xyPad.getThumbXValue().referTo          (audioProcessor.apvts.getParameterAsValue("TIME"));
-    xyPad.getThumbYValue().referTo          (audioProcessor.apvts.getParameterAsValue("FEEDBACK"));
+    
+    xyPad.getXValue().referTo               (audioProcessor.apvts.getParameterAsValue("TIME"));
+    xyPad.getYValue().referTo               (audioProcessor.apvts.getParameterAsValue("FEEDBACK"));
     
     timeRotary.onValueChange     = [this] { xyPad.repaint(); };
     feedbackRotary.onValueChange = [this] { xyPad.repaint(); };
-    
     
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
