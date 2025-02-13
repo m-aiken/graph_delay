@@ -37,20 +37,29 @@ juce_add_plugin(${PROJECT_NAME}
 juce_generate_juce_header(${PROJECT_NAME})
 
 set(PROJECT_SOURCES
-        source/CustomLookAndFeel.cpp
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
-        source/RotaryControl.cpp
-        source/XYPad.cpp
+        source/look_and_feel/CustomLookAndFeel.cpp
+        source/widgets/CustomLabel.cpp
+        source/widgets/RotaryControl.cpp
+        source/widgets/xy_grid/XyGrid.cpp
+        source/widgets/xy_grid/XyGridCanvas.cpp
+        source/widgets/xy_grid/XyGridOverlay.cpp
+        source/widgets/xy_grid/XyGridThumb.cpp
 )
 
 set(PROJECT_HEADERS
-        source/ColourMap.h
-        source/CustomLookAndFeel.h
         source/PluginEditor.h
         source/PluginProcessor.h
-        source/RotaryControl.h
-        source/XYPad.h
+        source/look_and_feel/CustomLookAndFeel.h
+        source/look_and_feel/Theme.h
+        source/utility/GlobalConstants.h
+        source/widgets/CustomLabel.h
+        source/widgets/RotaryControl.h
+        source/widgets/xy_grid/XyGrid.h
+        source/widgets/xy_grid/XyGridCanvas.h
+        source/widgets/xy_grid/XyGridOverlay.h
+        source/widgets/xy_grid/XyGridThumb.h
 )
 
 target_sources(${PROJECT_NAME}
@@ -62,6 +71,10 @@ target_sources(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/source
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/look_and_feel
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/utility
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/widgets/xy_grid
 )
 
 # JUCE modules make use of compile definitions to switch certain features on/off.

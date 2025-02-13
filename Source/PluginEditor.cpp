@@ -1,91 +1,99 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
-#include "PluginProcessor.h"
+#include "GlobalConstants.h"
 #include "PluginEditor.h"
+#include "PluginProcessor.h"
+#include "Theme.h"
 
-//==============================================================================
-JuceDelayV2AudioProcessorEditor::JuceDelayV2AudioProcessorEditor (JuceDelayV2AudioProcessor& p)
-    : AudioProcessorEditor(&p), audioProcessor(p)
+/*---------------------------------------------------------------------------
+**
+*/
+PluginEditor::PluginEditor(PluginProcessor& p)
+    : AudioProcessorEditor(&p)
+    , processor_ref_(p)
+    , time_rotary_(p.getApvts(), DelayParams::TIME)
+    , feedback_rotary_(p.getApvts(), DelayParams::FEEDBACK)
+    , wet_rotary_(p.getApvts(), DelayParams::WET_LEVEL)
+    , dry_rotary_(p.getApvts(), DelayParams::DRY_LEVEL)
+    , time_label_(DelayParams::TIME)
+    , feedback_label_(DelayParams::FEEDBACK)
+    , wet_label_(DelayParams::WET_LEVEL)
+    , dry_label_(DelayParams::DRY_LEVEL)
+    , xy_grid_(p)
 {
-    addAndMakeVisible(timeRotary);
-    addAndMakeVisible(feedbackRotary);
-    addAndMakeVisible(wetRotary);
-    addAndMakeVisible(dryRotary);
-    
-    addAndMakeVisible(timeLabel);
-    addAndMakeVisible(feedbackLabel);
-    addAndMakeVisible(wetLabel);
-    addAndMakeVisible(dryLabel);
-    
-    formatLabel(timeLabel, "Time");
-    formatLabel(feedbackLabel, "Feedback");
-    formatLabel(wetLabel, "Wet");
-    formatLabel(dryLabel, "Dry");
-    
-    addAndMakeVisible(xyPad);
-    
-    timeRotary.getValueObject().referTo     (audioProcessor.apvts.getParameterAsValue("TIME"));
-    feedbackRotary.getValueObject().referTo (audioProcessor.apvts.getParameterAsValue("FEEDBACK"));
-    wetRotary.getValueObject().referTo      (audioProcessor.apvts.getParameterAsValue("WET"));
-    dryRotary.getValueObject().referTo      (audioProcessor.apvts.getParameterAsValue("DRY"));
-    
-    xyPad.getXValue().referTo               (audioProcessor.apvts.getParameterAsValue("TIME"));
-    xyPad.getYValue().referTo               (audioProcessor.apvts.getParameterAsValue("FEEDBACK"));
-    
-    timeRotary.onValueChange     = [this] { xyPad.repaint(); };
-    feedbackRotary.onValueChange = [this] { xyPad.repaint(); };
-    
+    setLookAndFeel(&lnf_);
+
+    addAndMakeVisible(time_rotary_);
+    addAndMakeVisible(feedback_rotary_);
+    addAndMakeVisible(wet_rotary_);
+    addAndMakeVisible(dry_rotary_);
+
+    addAndMakeVisible(time_label_);
+    addAndMakeVisible(feedback_label_);
+    addAndMakeVisible(wet_label_);
+    addAndMakeVisible(dry_label_);
+
+    addAndMakeVisible(xy_grid_);
+
+    time_rotary_.onValueChange     = [this] { xy_grid_.repaint(); };
+    feedback_rotary_.onValueChange = [this] { xy_grid_.repaint(); };
+
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (600, 400);
+    setSize(Gui::WINDOW_WIDTH, Gui::WINDOW_HEIGHT);
 }
 
-JuceDelayV2AudioProcessorEditor::~JuceDelayV2AudioProcessorEditor()
+/*---------------------------------------------------------------------------
+**
+*/
+PluginEditor::~PluginEditor()
 {
+    setLookAndFeel(nullptr);
 }
 
-//==============================================================================
-void JuceDelayV2AudioProcessorEditor::paint (juce::Graphics& g)
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginEditor::paint(juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll(ColourMap::getColour(ColourMap::Eggshell));
+    g.fillAll(Theme::getColour(Theme::EGGSHELL));
 }
 
-void JuceDelayV2AudioProcessorEditor::resized()
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
-    auto bounds   = getLocalBounds();
-    auto width    = bounds.getWidth();
-    auto bottom   = bounds.getBottom();
-    auto padding  = 20;
-    auto rotaryXY = 100;
-    auto labelHeight = rotaryXY / 4;
-    
-    timeRotary.setBounds     (padding,                    rotaryXY * 0.5,             rotaryXY, rotaryXY);
-    feedbackRotary.setBounds (padding,                    bottom - (rotaryXY * 1.75), rotaryXY, rotaryXY);
-    dryRotary.setBounds      (width - rotaryXY - padding, rotaryXY * 0.5,             rotaryXY, rotaryXY);
-    wetRotary.setBounds      (width - rotaryXY - padding, bottom - (rotaryXY * 1.75), rotaryXY, rotaryXY);
-    
-    timeLabel.setBounds     (timeRotary.getX(),     timeRotary.getBottom(),     rotaryXY, labelHeight);
-    feedbackLabel.setBounds (feedbackRotary.getX(), feedbackRotary.getBottom(), rotaryXY, labelHeight);
-    wetLabel.setBounds      (wetRotary.getX(),      wetRotary.getBottom(),      rotaryXY, labelHeight);
-    dryLabel.setBounds      (dryRotary.getX(),      dryRotary.getBottom(),      rotaryXY, labelHeight);
-    
-    auto xyPadDims = 320;
-    xyPad.setBounds(bounds.getCentreX() - (xyPadDims / 2), bounds.getCentreY() - (xyPadDims / 2), xyPadDims, xyPadDims);
+    const auto     bounds  = getLocalBounds();
+    const auto     width   = bounds.getWidth();
+    const auto     bottom  = bounds.getBottom();
+    constexpr auto padding = 20;
+
+    constexpr auto label_height = Gui::ROTARY_DIAMETER / 4;
+
+    time_rotary_.setBounds(padding, Gui::ROTARY_DIAMETER * 0.5, Gui::ROTARY_DIAMETER, Gui::ROTARY_DIAMETER);
+    feedback_rotary_.setBounds(padding, bottom - (Gui::ROTARY_DIAMETER * 1.75), Gui::ROTARY_DIAMETER, Gui::ROTARY_DIAMETER);
+    dry_rotary_.setBounds(width - Gui::ROTARY_DIAMETER - padding,
+                          Gui::ROTARY_DIAMETER * 0.5,
+                          Gui::ROTARY_DIAMETER,
+                          Gui::ROTARY_DIAMETER);
+    wet_rotary_.setBounds(width - Gui::ROTARY_DIAMETER - padding,
+                          bottom - (Gui::ROTARY_DIAMETER * 1.75),
+                          Gui::ROTARY_DIAMETER,
+                          Gui::ROTARY_DIAMETER);
+
+    time_label_.setBounds(time_rotary_.getX(), time_rotary_.getBottom(), Gui::ROTARY_DIAMETER, label_height);
+    feedback_label_.setBounds(feedback_rotary_.getX(), feedback_rotary_.getBottom(), Gui::ROTARY_DIAMETER, label_height);
+    wet_label_.setBounds(wet_rotary_.getX(), wet_rotary_.getBottom(), Gui::ROTARY_DIAMETER, label_height);
+    dry_label_.setBounds(dry_rotary_.getX(), dry_rotary_.getBottom(), Gui::ROTARY_DIAMETER, label_height);
+
+    xy_grid_.setBounds(bounds.getCentreX() - (Gui::GRAPH_DIAMETER / 2),
+                       bounds.getCentreY() - (Gui::GRAPH_DIAMETER / 2),
+                       Gui::GRAPH_DIAMETER,
+                       Gui::GRAPH_DIAMETER);
 }
 
-void JuceDelayV2AudioProcessorEditor::formatLabel(juce::Label& label, const juce::String& labelText)
-{
-    label.setText(labelText, juce::dontSendNotification);
-    label.setJustificationType(juce::Justification::centred);
-    label.setFont(juce::Font(juce::Font::getDefaultMonospacedFontName(), 14.f, 0));
-    label.setColour(juce::Label::ColourIds::textColourId, ColourMap::getColour(ColourMap::Blue));
-}
+/*---------------------------------------------------------------------------
+** End of File
+*/

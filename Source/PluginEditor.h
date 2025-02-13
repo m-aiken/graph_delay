@@ -1,47 +1,38 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin editor.
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include <JuceHeader.h>
-#include "PluginProcessor.h"
-#include "ColourMap.h"
-#include "RotaryControl.h"
-#include "XYPad.h"
 
-//==============================================================================
-/**
-*/
-class JuceDelayV2AudioProcessorEditor  : public juce::AudioProcessorEditor
+#include "CustomLabel.h"
+#include "CustomLookAndFeel.h"
+#include "PluginProcessor.h"
+#include "RotaryControl.h"
+#include "XyGrid.h"
+
+class PluginEditor : public juce::AudioProcessorEditor
 {
 public:
-    JuceDelayV2AudioProcessorEditor (JuceDelayV2AudioProcessor&);
-    ~JuceDelayV2AudioProcessorEditor() override;
+    explicit PluginEditor(PluginProcessor& p);
+    ~PluginEditor() override;
 
-    //==============================================================================
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics& g) override;
     void resized() override;
-    
-    void formatLabel(juce::Label& label, const juce::String& labelText);
-    
+
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
-    JuceDelayV2AudioProcessor& audioProcessor;
-    
-    RotaryControl timeRotary     {   0.0, 1000.0 },
-                  feedbackRotary {   0.0,    1.0 },
-                  wetRotary      { -60.0,    0.0 },
-                  dryRotary      { -60.0,    0.0 };
-    
-    juce::Label timeLabel, feedbackLabel, wetLabel, dryLabel;
-    
-    XYContainer xyPad;
-    
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JuceDelayV2AudioProcessorEditor)
+    PluginProcessor& processor_ref_;
+
+    RotaryControl time_rotary_;
+    RotaryControl feedback_rotary_;
+    RotaryControl wet_rotary_;
+    RotaryControl dry_rotary_;
+
+    CustomLabel time_label_;
+    CustomLabel feedback_label_;
+    CustomLabel wet_label_;
+    CustomLabel dry_label_;
+
+    XyGrid xy_grid_;
+
+    CustomLookAndFeel lnf_;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };

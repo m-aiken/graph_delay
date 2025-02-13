@@ -1,266 +1,343 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//==============================================================================
-JuceDelayV2AudioProcessor::JuceDelayV2AudioProcessor()
-#ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       )
-#endif
+/*---------------------------------------------------------------------------
+**
+*/
+PluginProcessor::PluginProcessor()
+    : AudioProcessor(BusesProperties()
+                         .withInput("Input", juce::AudioChannelSet::stereo(), true)
+                         .withOutput("Output", juce::AudioChannelSet::stereo(), true))
+    , apvts_(*this, nullptr, "APVTS", getParameterLayout())
+    , delay_time_(0.f)
+    , delay_feedback_(0.f)
+    , delay_wet_level_(0.f)
+    , delay_dry_level_(0.f)
+    , delay_signal_(0.f)
 {
 }
 
-JuceDelayV2AudioProcessor::~JuceDelayV2AudioProcessor()
+/*---------------------------------------------------------------------------
+**
+*/
+PluginProcessor::~PluginProcessor()
 {
 }
 
-//==============================================================================
-const juce::String JuceDelayV2AudioProcessor::getName() const
+/*---------------------------------------------------------------------------
+**
+*/
+const juce::String
+PluginProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool JuceDelayV2AudioProcessor::acceptsMidi() const
+/*---------------------------------------------------------------------------
+**
+*/
+bool
+PluginProcessor::acceptsMidi() const
 {
-   #if JucePlugin_WantsMidiInput
-    return true;
-   #else
     return false;
-   #endif
 }
 
-bool JuceDelayV2AudioProcessor::producesMidi() const
+/*---------------------------------------------------------------------------
+**
+*/
+bool
+PluginProcessor::producesMidi() const
 {
-   #if JucePlugin_ProducesMidiOutput
-    return true;
-   #else
     return false;
-   #endif
 }
 
-bool JuceDelayV2AudioProcessor::isMidiEffect() const
+/*---------------------------------------------------------------------------
+**
+*/
+bool
+PluginProcessor::isMidiEffect() const
 {
-   #if JucePlugin_IsMidiEffect
-    return true;
-   #else
     return false;
-   #endif
 }
 
-double JuceDelayV2AudioProcessor::getTailLengthSeconds() const
+/*---------------------------------------------------------------------------
+**
+*/
+double
+PluginProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int JuceDelayV2AudioProcessor::getNumPrograms()
+/*---------------------------------------------------------------------------
+**
+*/
+int
+PluginProcessor::getNumPrograms()
 {
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
+    return 1;  // NB: some hosts don't cope very well if you tell them there are 0 programs,
+               // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int JuceDelayV2AudioProcessor::getCurrentProgram()
+/*---------------------------------------------------------------------------
+**
+*/
+int
+PluginProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void JuceDelayV2AudioProcessor::setCurrentProgram (int index)
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::setCurrentProgram(int index)
 {
+    juce::ignoreUnused(index);
 }
 
-const juce::String JuceDelayV2AudioProcessor::getProgramName (int index)
+/*---------------------------------------------------------------------------
+**
+*/
+const juce::String
+PluginProcessor::getProgramName(int index)
 {
+    juce::ignoreUnused(index);
+
     return {};
 }
 
-void JuceDelayV2AudioProcessor::changeProgramName (int index, const juce::String& newName)
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::changeProgramName(int index, const juce::String& new_name)
 {
+    juce::ignoreUnused(index, new_name);
 }
 
-//==============================================================================
-void JuceDelayV2AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 {
-    sRate = sampleRate;
-    
-    delayTime     = apvts.getRawParameterValue("TIME")->load();
-    delayFeedback = apvts.getRawParameterValue("FEEDBACK")->load();
-    delayWetLevel = apvts.getRawParameterValue("WET")->load();
-    delayDryLevel = apvts.getRawParameterValue("DRY")->load();
-    
+    delay_time_      = getParamValue(DelayParams::TIME);
+    delay_feedback_  = getParamValue(DelayParams::FEEDBACK);
+    delay_wet_level_ = juce::Decibels::decibelsToGain(getParamValue(DelayParams::WET_LEVEL));
+    delay_dry_level_ = juce::Decibels::decibelsToGain(getParamValue(DelayParams::DRY_LEVEL));
+
+    const int input_channels = getTotalNumInputChannels();
+
     juce::dsp::ProcessSpec spec;
-    spec.sampleRate       = sampleRate;
-    spec.maximumBlockSize = samplesPerBlock;
-    spec.numChannels      = getTotalNumOutputChannels();
-    
-    for (int i = 0; i < 2; ++i)
-    {
-        delayTimeSmoothed[i].reset(sampleRate, 0.01);
-        
-        delayLines[i].reset();
-        delayLines[i].prepare(spec);
+    spec.sampleRate       = sample_rate;
+    spec.maximumBlockSize = samples_per_block;
+    spec.numChannels      = input_channels;
+
+    delay_lines_.resize(input_channels);
+    smoothed_delay_times_.resize(input_channels);
+
+    for (int i = 0; i < delay_lines_.size(); ++i) {
+        smoothed_delay_times_.at(i).reset(sample_rate, 0.01);
+        smoothed_delay_times_.at(i).setCurrentAndTargetValue(0.f);
+
+        delay_lines_.at(i).reset();
+        delay_lines_.at(i).prepare(spec);
+        delay_lines_.at(i).setMaximumDelayInSamples(static_cast< int >(sample_rate));
     }
 }
 
-void JuceDelayV2AudioProcessor::releaseResources()
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
-#ifndef JucePlugin_PreferredChannelConfigurations
-bool JuceDelayV2AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+/*---------------------------------------------------------------------------
+**
+*/
+bool
+PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
-  #if JucePlugin_IsMidiEffect
-    juce::ignoreUnused (layouts);
-    return true;
-  #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    // Some plugin hosts, such as certain GarageBand versions, will only
-    // load plugins that support stereo bus layouts.
-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
-        return false;
+    // Some plugin hosts will only support mono or stereo output bus layouts.
+    const bool mono_out   = layouts.getMainOutputChannelSet() == juce::AudioChannelSet::mono();
+    const bool stereo_out = layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo();
 
-    // This checks if the input layout matches the output layout
-   #if ! JucePlugin_IsSynth
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
-        return false;
-   #endif
+    // We want the input and output layouts to match (i.e. mono in --> mono out or stereo in --> stereo out).
+    const bool in_matches_out = layouts.getMainInputChannelSet() == layouts.getMainOutputChannelSet();
 
-    return true;
-  #endif
+    return (mono_out || stereo_out) && in_matches_out;
 }
-#endif
 
-void JuceDelayV2AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuffer& midi_messages)
 {
-    juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-    
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
+    juce::ignoreUnused(midi_messages);
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    //for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    for (int channel = 0; channel < 2; ++channel)
-    {
-        auto* channelDataWrite = buffer.getWritePointer (channel);
-    
-        for (int i = 0; i < buffer.getNumSamples(); ++i)
-        {
-            delayTime     = apvts.getRawParameterValue("TIME")->load();
-            delayFeedback = apvts.getRawParameterValue("FEEDBACK")->load();
-            delayWetLevel = juce::Decibels::decibelsToGain(apvts.getRawParameterValue("WET")->load());
-            delayDryLevel = juce::Decibels::decibelsToGain(apvts.getRawParameterValue("DRY")->load());
-            
-            delayTimeSmoothed[channel].setTargetValue(delayTime);
-            delayTime = delayTimeSmoothed[channel].getNextValue();
-                       
-            delaySignal = processDelay(channel, channelDataWrite[i]);
-            
-            channelDataWrite[i] = (channelDataWrite[i] * delayDryLevel) + (delaySignal * delayWetLevel);
+    juce::ScopedNoDenormals no_denormals;
+    const int               num_input_channels  = getTotalNumInputChannels();
+    const int               num_output_channels = getTotalNumOutputChannels();
+
+    // In case we have more outputs than inputs, clear any output channels that don't contain input data.
+    for (auto i = num_input_channels; i < num_output_channels; ++i) {
+        buffer.clear(i, 0, buffer.getNumSamples());
+    }
+
+    for (int channel = 0; channel < num_input_channels; ++channel) {
+        for (int sample_index = 0; sample_index < buffer.getNumSamples(); ++sample_index) {
+            const float input_sample = buffer.getSample(channel, sample_index);
+
+            delay_time_      = getParamValue(DelayParams::TIME);
+            delay_feedback_  = getParamValue(DelayParams::FEEDBACK);
+            delay_wet_level_ = juce::Decibels::decibelsToGain(getParamValue(DelayParams::WET_LEVEL));
+            delay_dry_level_ = juce::Decibels::decibelsToGain(getParamValue(DelayParams::DRY_LEVEL));
+
+            smoothed_delay_times_.at(channel).setTargetValue(delay_time_);
+            delay_time_ = smoothed_delay_times_.at(channel).getNextValue();
+
+            delay_signal_ = processDelay(channel, input_sample);
+
+            const float new_value = (input_sample * delay_dry_level_) + (delay_signal_ * delay_wet_level_);
+
+            buffer.setSample(channel, sample_index, new_value);
         }
     }
 }
 
-float JuceDelayV2AudioProcessor::processDelay(int& channel, float& inputSample)
+/*---------------------------------------------------------------------------
+**
+*/
+bool
+PluginProcessor::hasEditor() const
 {
-    auto delaySample = delayLines[channel].popSample(channel, static_cast<int>( (sRate * delayTime) / 1000.f ) );
-    
-    delayLines[channel].pushSample(channel, std::tanh(inputSample + delayFeedback * delaySample));
-
-    return delaySample;
+    return true;
 }
 
-//==============================================================================
-bool JuceDelayV2AudioProcessor::hasEditor() const
+/*---------------------------------------------------------------------------
+**
+*/
+juce::AudioProcessorEditor*
+PluginProcessor::createEditor()
 {
-    return true; // (change this to false if you choose to not supply an editor)
+    return new PluginEditor(*this);
 }
 
-juce::AudioProcessorEditor* JuceDelayV2AudioProcessor::createEditor()
-{
-    return new JuceDelayV2AudioProcessorEditor (*this);
-}
-
-//==============================================================================
-void JuceDelayV2AudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::getStateInformation(juce::MemoryBlock& dest_data)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
-    juce::MemoryOutputStream mos (destData, true);
-    apvts.state.writeToStream(mos);
+    juce::MemoryOutputStream mos(dest_data, true);
+    apvts_.state.writeToStream(mos);
 }
 
-void JuceDelayV2AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+/*---------------------------------------------------------------------------
+**
+*/
+void
+PluginProcessor::setStateInformation(const void* data, int size_in_bytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
-    auto tree = juce::ValueTree::readFromData (data, sizeInBytes);
-    
-    if (tree.isValid())
-    {
-        apvts.replaceState(tree);
+    auto tree = juce::ValueTree::readFromData(data, size_in_bytes);
+
+    if (tree.isValid()) {
+        apvts_.replaceState(tree);
     }
 }
 
-juce::AudioProcessorValueTreeState::ParameterLayout JuceDelayV2AudioProcessor::getParameterLayout()
+/*---------------------------------------------------------------------------
+**
+*/
+juce::AudioProcessorValueTreeState&
+PluginProcessor::getApvts()
+{
+    return apvts_;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+float
+PluginProcessor::getParamValue(const DelayParams::ParamId& param_id) const
+{
+    const juce::RangedAudioParameter* param = apvts_.getParameter(param_id);
+
+    return (param != nullptr) ? param->convertFrom0to1(param->getValue()) : 0.f;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+float
+PluginProcessor::processDelay(const int channel, const float input_sample)
+{
+    const auto srate_f          = static_cast< float >(getSampleRate());
+    const auto delay_in_samples = (srate_f * delay_time_) / 1000.f;
+    const auto delay_sample     = delay_lines_.at(channel).popSample(channel, delay_in_samples);
+
+    delay_lines_.at(channel).pushSample(channel, std::tanh(input_sample + delay_feedback_ * delay_sample));
+
+    return delay_sample;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+juce::AudioProcessorValueTreeState::ParameterLayout
+PluginProcessor::getParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
-    layout.add(std::make_unique<juce::AudioParameterFloat>("TIME",
-                                                           "Delay Time",
-                                                           juce::NormalisableRange<float>(0.f, 1000.f, 1.f),
-                                                           400.f));
+    const juce::NormalisableRange< float > time_range(DelayParams::DELAY_MS_MIN, DelayParams::DELAY_MS_MAX, 1.f);
+    const juce::NormalisableRange< float > feedback_range(DelayParams::FEEDBACK_MIN, DelayParams::FEEDBACK_MAX, 0.01f);
+    const juce::NormalisableRange< float > wet_range(DelayParams::DB_MIN, DelayParams::DB_MAX, 1.f);
+    const juce::NormalisableRange< float > dry_range(DelayParams::DB_MIN, DelayParams::DB_MAX, 1.f);
 
-    layout.add(std::make_unique<juce::AudioParameterFloat>("FEEDBACK",
-                                                           "Feedback",
-                                                           juce::NormalisableRange<float>(0.f, 1.f, 0.01f),
-                                                           0.5f));
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(DelayParams::TIME, 1),
+                                                             DelayParams::TIME,
+                                                             time_range,
+                                                             DelayParams::DELAY_MS_DEFAULT));
 
-    layout.add(std::make_unique<juce::AudioParameterFloat>("WET",
-                                                           "Wet",
-                                                           juce::NormalisableRange<float>(-60.f, 0.f, 1.f),
-                                                           -6.f));
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(DelayParams::FEEDBACK, 1),
+                                                             DelayParams::FEEDBACK,
+                                                             feedback_range,
+                                                             DelayParams::FEEDBACK_DEFAULT));
 
-    layout.add(std::make_unique<juce::AudioParameterFloat>("DRY",
-                                                           "Dry",
-                                                           juce::NormalisableRange<float>(-60.f, 0.f, 1.f),
-                                                           -6.f));
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(DelayParams::WET_LEVEL, 1),
+                                                             DelayParams::WET_LEVEL,
+                                                             wet_range,
+                                                             DelayParams::DB_DEFAULT_WET_LEVEL));
+
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(DelayParams::DRY_LEVEL, 1),
+                                                             DelayParams::DRY_LEVEL,
+                                                             dry_range,
+                                                             0.f));
 
     return layout;
 }
 
-//==============================================================================
-// This creates new instances of the plugin..
-juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+/*---------------------------------------------------------------------------
+**
+*/
+juce::AudioProcessor* JUCE_CALLTYPE
+createPluginFilter()
 {
-    return new JuceDelayV2AudioProcessor();
+    return new PluginProcessor();
 }
+
+/*---------------------------------------------------------------------------
+** End of File
+*/
