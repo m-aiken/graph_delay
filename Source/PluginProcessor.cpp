@@ -135,16 +135,14 @@ PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
     spec.maximumBlockSize = samples_per_block;
     spec.numChannels      = input_channels;
 
-    delay_lines_.resize(input_channels);
+    delay_line_.prepare(spec);
+    delay_line_.setMaximumDelayInSamples(static_cast< int >(sample_rate) * 2);
+
     smoothed_delay_times_.resize(input_channels);
 
-    for (int i = 0; i < delay_lines_.size(); ++i) {
+    for (int i = 0; i < input_channels; ++i) {
         smoothed_delay_times_.at(i).reset(sample_rate, 0.01);
         smoothed_delay_times_.at(i).setCurrentAndTargetValue(0.f);
-
-        delay_lines_.at(i).reset();
-        delay_lines_.at(i).prepare(spec);
-        delay_lines_.at(i).setMaximumDelayInSamples(static_cast< int >(sample_rate));
     }
 }
 
@@ -286,9 +284,10 @@ PluginProcessor::processDelay(const int channel, const float input_sample)
 {
     const auto srate_f          = static_cast< float >(getSampleRate());
     const auto delay_in_samples = (srate_f * delay_time_) / 1000.f;
-    const auto delay_sample     = delay_lines_.at(channel).popSample(channel, delay_in_samples);
+    const auto delay_sample     = delay_line_.popSample(channel, delay_in_samples);
+    const auto sample_to_push   = std::tanh(input_sample + delay_feedback_ * delay_sample);
 
-    delay_lines_.at(channel).pushSample(channel, std::tanh(input_sample + delay_feedback_ * delay_sample));
+    delay_line_.pushSample(channel, sample_to_push);
 
     return delay_sample;
 }

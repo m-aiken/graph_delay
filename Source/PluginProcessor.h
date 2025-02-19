@@ -51,8 +51,8 @@ private:
     float delay_dry_level_;
     float delay_signal_;
 
-    std::vector< juce::dsp::DelayLine< float > > delay_lines_;
-    std::vector< juce::SmoothedValue< float > >  smoothed_delay_times_;
+    juce::dsp::DelayLine< float >               delay_line_;
+    std::vector< juce::SmoothedValue< float > > smoothed_delay_times_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginProcessor)
 };
