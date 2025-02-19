@@ -74,6 +74,8 @@ RotaryControl::parameterValueChanged(int parameter_index, float new_value)
 {
     juce::ignoreUnused(parameter_index, new_value);
 
+    const juce::MessageManagerLock mml;
+
     repaint();
 }
 
