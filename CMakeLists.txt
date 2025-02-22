@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.23)
-project(XY_DELAY VERSION 1.0.0)
+project(GRAPH_DELAY VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(JUCE_COPY_PLUGIN_AFTER_BUILD ON)
@@ -32,7 +32,7 @@ juce_add_plugin(${PROJECT_NAME}
         PLUGIN_CODE P009                            # A unique four-character plugin id with exactly one upper-case character
         # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
         FORMATS AU VST3 Standalone                  # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
-        PRODUCT_NAME "XY Delay")                    # The name of the final executable, which can differ from the target name
+        PRODUCT_NAME "Graph Delay")                 # The name of the final executable, which can differ from the target name
 
 juce_generate_juce_header(${PROJECT_NAME})
 
