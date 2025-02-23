@@ -39,8 +39,11 @@ juce_generate_juce_header(${PROJECT_NAME})
 set(PROJECT_SOURCES
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
+        source/gui/interval_control/IntervalButton.cpp
+        source/gui/interval_control/IntervalButtons.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/widgets/CustomLabel.cpp
+        source/gui/widgets/CustomToggleButton.cpp
         source/gui/widgets/RotaryControl.cpp
         source/gui/xy_graph/XyGraph.cpp
         source/gui/xy_graph/XyGraphCanvas.cpp
@@ -51,9 +54,12 @@ set(PROJECT_SOURCES
 set(PROJECT_HEADERS
         source/PluginEditor.h
         source/PluginProcessor.h
+        source/gui/interval_control/IntervalButton.h
+        source/gui/interval_control/IntervalButtons.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
         source/gui/widgets/CustomLabel.h
+        source/gui/widgets/CustomToggleButton.h
         source/gui/widgets/RotaryControl.h
         source/gui/xy_graph/XyGraph.h
         source/gui/xy_graph/XyGraphCanvas.h
@@ -71,6 +77,7 @@ target_sources(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/source
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/interval_control
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/xy_graph

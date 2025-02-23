@@ -25,13 +25,12 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(feedback_rotary_);
     addAndMakeVisible(wet_rotary_);
     addAndMakeVisible(dry_rotary_);
-
     addAndMakeVisible(time_label_);
     addAndMakeVisible(feedback_label_);
     addAndMakeVisible(wet_label_);
     addAndMakeVisible(dry_label_);
-
     addAndMakeVisible(xy_graph_);
+    addAndMakeVisible(interval_buttons_);
 
     time_rotary_.onValueChange     = [this] { xy_graph_.repaint(); };
     feedback_rotary_.onValueChange = [this] { xy_graph_.repaint(); };
@@ -92,6 +91,9 @@ PluginEditor::resized()
                         bounds.getCentreY() - (Gui::GRAPH_DIAMETER / 2),
                         Gui::GRAPH_DIAMETER,
                         Gui::GRAPH_DIAMETER);
+
+    constexpr auto interval_button_height = 32;
+    interval_buttons_.setBounds(0, bounds.getBottom() - interval_button_height, width, interval_button_height);
 }
 
 /*---------------------------------------------------------------------------

@@ -4,6 +4,7 @@
 
 #include "CustomLabel.h"
 #include "CustomLookAndFeel.h"
+#include "IntervalButtons.h"
 #include "PluginProcessor.h"
 #include "RotaryControl.h"
 #include "XyGraph.h"
@@ -31,6 +32,8 @@ private:
     CustomLabel dry_label_;
 
     XyGraph xy_graph_;
+
+    IntervalButtons interval_buttons_;
 
     CustomLookAndFeel lnf_;
 
