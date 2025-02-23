@@ -1,9 +1,9 @@
-#include "XyGrid.h"
+#include "XyGraph.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-XyGrid::XyGrid(PluginProcessor& processor_ref)
+XyGraph::XyGraph(PluginProcessor& processor_ref)
     : overlay_(processor_ref)
 {
     addAndMakeVisible(canvas_);
@@ -14,7 +14,7 @@ XyGrid::XyGrid(PluginProcessor& processor_ref)
 **
 */
 void
-XyGrid::resized()
+XyGraph::resized()
 {
     const auto bounds = getLocalBounds();
 

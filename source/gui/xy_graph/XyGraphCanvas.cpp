@@ -1,11 +1,11 @@
 #include "Theme.h"
-#include "XyGridCanvas.h"
+#include "XyGraphCanvas.h"
 
 /*---------------------------------------------------------------------------
 **
 */
 void
-XyGridCanvas::paint(juce::Graphics& g)
+XyGraphCanvas::paint(juce::Graphics& g)
 {
     // Background.
     g.fillAll(Theme::getColour(Theme::GREEN).withAlpha(0.1f));

@@ -3,12 +3,12 @@
 #include <JuceHeader.h>
 
 #include "PluginProcessor.h"
-#include "XyGridThumb.h"
+#include "XyGraphThumb.h"
 
-class XyGridOverlay : public juce::Component
+class XyGraphOverlay : public juce::Component
 {
 public:
-    explicit XyGridOverlay(PluginProcessor& processor_ref);
+    explicit XyGraphOverlay(PluginProcessor& processor_ref);
 
     void paint(juce::Graphics& g) override;
     void mouseDrag(const juce::MouseEvent& event) override;
@@ -27,8 +27,8 @@ private:
 
     PluginProcessor& processor_ref_;
 
-    XyGridThumb      thumb_;
+    XyGraphThumb     thumb_;
     juce::DropShadow thumb_shadow_;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(XyGridOverlay)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(XyGraphOverlay)
 };

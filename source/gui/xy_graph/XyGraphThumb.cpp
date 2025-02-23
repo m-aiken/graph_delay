@@ -1,11 +1,11 @@
 #include "Theme.h"
-#include "XyGridThumb.h"
+#include "XyGraphThumb.h"
 
 /*---------------------------------------------------------------------------
 **
 */
 void
-XyGridThumb::paint(juce::Graphics& g)
+XyGraphThumb::paint(juce::Graphics& g)
 {
     g.setColour(Theme::getColour(Theme::SALMON));
     g.fillEllipse(getLocalBounds().toFloat());

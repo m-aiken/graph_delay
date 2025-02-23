@@ -17,7 +17,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     , feedback_label_(DelayParams::FEEDBACK)
     , wet_label_(DelayParams::WET_LEVEL)
     , dry_label_(DelayParams::DRY_LEVEL)
-    , xy_grid_(p)
+    , xy_graph_(p)
 {
     setLookAndFeel(&lnf_);
 
@@ -31,10 +31,10 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(wet_label_);
     addAndMakeVisible(dry_label_);
 
-    addAndMakeVisible(xy_grid_);
+    addAndMakeVisible(xy_graph_);
 
-    time_rotary_.onValueChange     = [this] { xy_grid_.repaint(); };
-    feedback_rotary_.onValueChange = [this] { xy_grid_.repaint(); };
+    time_rotary_.onValueChange     = [this] { xy_graph_.repaint(); };
+    feedback_rotary_.onValueChange = [this] { xy_graph_.repaint(); };
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -88,10 +88,10 @@ PluginEditor::resized()
     wet_label_.setBounds(wet_rotary_.getX(), wet_rotary_.getBottom(), Gui::ROTARY_DIAMETER, label_height);
     dry_label_.setBounds(dry_rotary_.getX(), dry_rotary_.getBottom(), Gui::ROTARY_DIAMETER, label_height);
 
-    xy_grid_.setBounds(bounds.getCentreX() - (Gui::GRAPH_DIAMETER / 2),
-                       bounds.getCentreY() - (Gui::GRAPH_DIAMETER / 2),
-                       Gui::GRAPH_DIAMETER,
-                       Gui::GRAPH_DIAMETER);
+    xy_graph_.setBounds(bounds.getCentreX() - (Gui::GRAPH_DIAMETER / 2),
+                        bounds.getCentreY() - (Gui::GRAPH_DIAMETER / 2),
+                        Gui::GRAPH_DIAMETER,
+                        Gui::GRAPH_DIAMETER);
 }
 
 /*---------------------------------------------------------------------------

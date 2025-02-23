@@ -39,27 +39,27 @@ juce_generate_juce_header(${PROJECT_NAME})
 set(PROJECT_SOURCES
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
-        source/look_and_feel/CustomLookAndFeel.cpp
-        source/widgets/CustomLabel.cpp
-        source/widgets/RotaryControl.cpp
-        source/widgets/xy_grid/XyGrid.cpp
-        source/widgets/xy_grid/XyGridCanvas.cpp
-        source/widgets/xy_grid/XyGridOverlay.cpp
-        source/widgets/xy_grid/XyGridThumb.cpp
+        source/gui/look_and_feel/CustomLookAndFeel.cpp
+        source/gui/widgets/CustomLabel.cpp
+        source/gui/widgets/RotaryControl.cpp
+        source/gui/xy_graph/XyGraph.cpp
+        source/gui/xy_graph/XyGraphCanvas.cpp
+        source/gui/xy_graph/XyGraphOverlay.cpp
+        source/gui/xy_graph/XyGraphThumb.cpp
 )
 
 set(PROJECT_HEADERS
         source/PluginEditor.h
         source/PluginProcessor.h
-        source/look_and_feel/CustomLookAndFeel.h
-        source/look_and_feel/Theme.h
+        source/gui/look_and_feel/CustomLookAndFeel.h
+        source/gui/look_and_feel/Theme.h
+        source/gui/widgets/CustomLabel.h
+        source/gui/widgets/RotaryControl.h
+        source/gui/xy_graph/XyGraph.h
+        source/gui/xy_graph/XyGraphCanvas.h
+        source/gui/xy_graph/XyGraphOverlay.h
+        source/gui/xy_graph/XyGraphThumb.h
         source/utility/GlobalConstants.h
-        source/widgets/CustomLabel.h
-        source/widgets/RotaryControl.h
-        source/widgets/xy_grid/XyGrid.h
-        source/widgets/xy_grid/XyGridCanvas.h
-        source/widgets/xy_grid/XyGridOverlay.h
-        source/widgets/xy_grid/XyGridThumb.h
 )
 
 target_sources(${PROJECT_NAME}
@@ -71,10 +71,10 @@ target_sources(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/source
-        ${CMAKE_CURRENT_SOURCE_DIR}/source/look_and_feel
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/xy_graph
         ${CMAKE_CURRENT_SOURCE_DIR}/source/utility
-        ${CMAKE_CURRENT_SOURCE_DIR}/source/widgets
-        ${CMAKE_CURRENT_SOURCE_DIR}/source/widgets/xy_grid
 )
 
 # JUCE modules make use of compile definitions to switch certain features on/off.

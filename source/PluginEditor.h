@@ -6,7 +6,7 @@
 #include "CustomLookAndFeel.h"
 #include "PluginProcessor.h"
 #include "RotaryControl.h"
-#include "XyGrid.h"
+#include "XyGraph.h"
 
 class PluginEditor : public juce::AudioProcessorEditor
 {
@@ -30,7 +30,7 @@ private:
     CustomLabel wet_label_;
     CustomLabel dry_label_;
 
-    XyGrid xy_grid_;
+    XyGraph xy_graph_;
 
     CustomLookAndFeel lnf_;
 

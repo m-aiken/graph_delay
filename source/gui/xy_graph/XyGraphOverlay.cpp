@@ -1,11 +1,11 @@
 #include "GlobalConstants.h"
 #include "Theme.h"
-#include "XyGridOverlay.h"
+#include "XyGraphOverlay.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-XyGridOverlay::XyGridOverlay(PluginProcessor& processor_ref)
+XyGraphOverlay::XyGraphOverlay(PluginProcessor& processor_ref)
     : processor_ref_(processor_ref)
     , thumb_shadow_(Theme::getColour(Theme::SALMON).withAlpha(0.6f), SHADOW_RADIUS, juce::Point< int >(0, 0))
 {
@@ -16,7 +16,7 @@ XyGridOverlay::XyGridOverlay(PluginProcessor& processor_ref)
 **
 */
 void
-XyGridOverlay::paint(juce::Graphics& g)
+XyGraphOverlay::paint(juce::Graphics& g)
 {
     const auto thumb_bounds = juce::Rectangle< int >(getXCoordinateFromParameterValue() + THUMB_RADIUS,
                                                      getYCoordinateFromParameterValue() + THUMB_RADIUS,
@@ -31,7 +31,7 @@ XyGridOverlay::paint(juce::Graphics& g)
 **
 */
 void
-XyGridOverlay::mouseDrag(const juce::MouseEvent& event)
+XyGraphOverlay::mouseDrag(const juce::MouseEvent& event)
 {
     juce::RangedAudioParameter* time_param     = processor_ref_.getApvts().getParameter(DelayParams::TIME);
     juce::RangedAudioParameter* feedback_param = processor_ref_.getApvts().getParameter(DelayParams::FEEDBACK);
@@ -56,7 +56,7 @@ XyGridOverlay::mouseDrag(const juce::MouseEvent& event)
 **
 */
 int
-XyGridOverlay::getXCoordinateFromParameterValue() const
+XyGraphOverlay::getXCoordinateFromParameterValue() const
 {
     const float source_value = processor_ref_.getParamValue(DelayParams::TIME);
     const float target_max   = getLocalBounds().reduced(THUMB_DIAMETER).toFloat().getWidth();
@@ -70,7 +70,7 @@ XyGridOverlay::getXCoordinateFromParameterValue() const
 **
 */
 int
-XyGridOverlay::getYCoordinateFromParameterValue() const
+XyGraphOverlay::getYCoordinateFromParameterValue() const
 {
     const float source_value = processor_ref_.getParamValue(DelayParams::FEEDBACK);
     const float target_min   = getLocalBounds().reduced(THUMB_DIAMETER).toFloat().getHeight();
@@ -84,7 +84,7 @@ XyGridOverlay::getYCoordinateFromParameterValue() const
 **
 */
 /*static*/ float
-XyGridOverlay::getParameterValueFromXCoordinate(int x_coordinate)
+XyGraphOverlay::getParameterValueFromXCoordinate(int x_coordinate)
 {
     x_coordinate = juce::jlimit< int >(MIN_VALID_COORDINATE, MAX_VALID_COORDINATE, x_coordinate);
 
@@ -101,7 +101,7 @@ XyGridOverlay::getParameterValueFromXCoordinate(int x_coordinate)
 **
 */
 /*static*/ float
-XyGridOverlay::getParameterValueFromYCoordinate(int y_coordinate)
+XyGraphOverlay::getParameterValueFromYCoordinate(int y_coordinate)
 {
     y_coordinate = juce::jlimit< int >(MIN_VALID_COORDINATE, MAX_VALID_COORDINATE, y_coordinate);
 
