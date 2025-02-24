@@ -14,5 +14,7 @@ public:
 private:
     juce::Colour background_colour_;
 
+    static constexpr uint8 BORDER_RADIUS = 8;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CustomToggleButton)
 };

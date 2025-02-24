@@ -18,19 +18,19 @@ CustomToggleButton::paintButton(juce::Graphics& g, bool should_draw_button_as_hi
 {
     juce::ignoreUnused(should_draw_button_as_highlighted, should_draw_button_as_down);
 
-    // Background.
-    g.fillAll(background_colour_);
+    const auto bounds = getLocalBounds();
 
-    // Outline.
-    if (getToggleState()) {
-        g.setColour(Theme::getColour(Theme::BLUE));
-        g.drawRect(getLocalBounds(), 2);
-    }
+    // Background.
+    g.setColour(background_colour_);
+    g.fillRoundedRectangle(bounds.toFloat(), BORDER_RADIUS);
 
     // Text.
-    g.setColour(Theme::getColour(Theme::BLUE));
-    g.setFont(Theme::getFont());
-    g.drawFittedText(getButtonText(), getLocalBounds(), juce::Justification::centred, 1);
+    const auto& is_toggled = getToggleState();
+    const auto& font       = Theme::getFont();
+
+    g.setColour(Theme::getColour(Theme::BLUE).withAlpha(is_toggled ? 1.f : 0.4f));
+    g.setFont(is_toggled ? font.boldened() : font);
+    g.drawFittedText(getButtonText(), bounds, juce::Justification::centred, 1);
 }
 
 /*---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ CustomToggleButton::mouseEnter(const juce::MouseEvent& event)
 {
     juce::ignoreUnused(event);
 
-    background_colour_ = Theme::getColour(Theme::GREEN).withAlpha(0.3f);
+    background_colour_ = Theme::getColour(Theme::GREEN).withAlpha(0.2f);
 
     setMouseCursor(juce::MouseCursor::PointingHandCursor);
     repaint();
