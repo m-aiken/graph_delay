@@ -39,7 +39,7 @@ RotaryControl::paint(juce::Graphics& g)
     }
 
     const auto& bounds       = getLocalBounds();
-    const auto  diameter     = static_cast< int >(std::floor(bounds.getWidth() * 0.9));
+    const auto  diameter     = std::min(bounds.getWidth(), bounds.getHeight());
     const auto  radius       = static_cast< int >(std::floor(diameter * 0.5));
     const auto& range        = getRange();
     const auto value_to_draw = juce::jmap< double >(getValue(), range.getStart(), range.getEnd(), START_ANGLE, END_ANGLE);

@@ -45,6 +45,7 @@ set(PROJECT_SOURCES
         source/gui/widgets/CustomLabel.cpp
         source/gui/widgets/CustomToggleButton.cpp
         source/gui/widgets/RotaryControl.cpp
+        source/gui/widgets/RotaryWithLabel.cpp
         source/gui/xy_graph/XyGraph.cpp
         source/gui/xy_graph/XyGraphCanvas.cpp
         source/gui/xy_graph/XyGraphOverlay.cpp
@@ -61,6 +62,7 @@ set(PROJECT_HEADERS
         source/gui/widgets/CustomLabel.h
         source/gui/widgets/CustomToggleButton.h
         source/gui/widgets/RotaryControl.h
+        source/gui/widgets/RotaryWithLabel.h
         source/gui/xy_graph/XyGraph.h
         source/gui/xy_graph/XyGraphCanvas.h
         source/gui/xy_graph/XyGraphOverlay.h

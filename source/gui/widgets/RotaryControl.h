@@ -9,7 +9,7 @@ class RotaryControl
     , public juce::AudioProcessorParameter::Listener
 {
 public:
-    explicit RotaryControl(juce::AudioProcessorValueTreeState& apvts, const DelayParams::ParamId& param_id);
+    RotaryControl(juce::AudioProcessorValueTreeState& apvts, const DelayParams::ParamId& param_id);
     ~RotaryControl() override;
 
     void paint(juce::Graphics& g) override;

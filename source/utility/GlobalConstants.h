@@ -5,10 +5,11 @@
 namespace Gui
 {
 
-static constexpr int WINDOW_WIDTH    = 600;
-static constexpr int WINDOW_HEIGHT   = 400;
-static constexpr int ROTARY_DIAMETER = 100;
+static constexpr int WINDOW_WIDTH    = 800;
+static constexpr int WINDOW_HEIGHT   = 600;
+static constexpr int PADDING         = 20;
 static constexpr int GRAPH_DIAMETER  = 320;
+static constexpr int ROTARY_DIAMETER = (GRAPH_DIAMETER / 2) - (PADDING * 2);
 
 enum RADIO_GROUP_ID {
     INTERVAL_BUTTONS = 1001,
