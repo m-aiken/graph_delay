@@ -41,6 +41,7 @@ set(PROJECT_SOURCES
         source/PluginProcessor.cpp
         source/gui/interval_control/IntervalButton.cpp
         source/gui/interval_control/IntervalButtons.cpp
+        source/gui/interval_control/IntervalComboBox.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/widgets/CustomLabel.cpp
         source/gui/widgets/CustomToggleButton.cpp
@@ -57,6 +58,7 @@ set(PROJECT_HEADERS
         source/PluginProcessor.h
         source/gui/interval_control/IntervalButton.h
         source/gui/interval_control/IntervalButtons.h
+        source/gui/interval_control/IntervalComboBox.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
         source/gui/widgets/CustomLabel.h

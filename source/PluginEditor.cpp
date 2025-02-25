@@ -23,6 +23,7 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(dry_rotary_);
     addAndMakeVisible(xy_graph_);
     addAndMakeVisible(interval_buttons_);
+    addAndMakeVisible(interval_combo_box_);
 
     time_rotary_.getRotaryRef().onValueChange     = [this] { xy_graph_.repaint(); };
     feedback_rotary_.getRotaryRef().onValueChange = [this] { xy_graph_.repaint(); };
@@ -79,7 +80,9 @@ PluginEditor::resized()
 
     constexpr auto button_height         = 32;
     const auto     initial_button_bounds = juce::Rectangle< int >(0, bottom - button_height, width, button_height);
-    interval_buttons_.setBounds(initial_button_bounds.reduced(4));
+    // interval_buttons_.setBounds(initial_button_bounds.reduced(4));
+
+    interval_combo_box_.setBounds(Gui::PADDING, Gui::PADDING, button_height * 2, button_height);
 }
 
 /*---------------------------------------------------------------------------

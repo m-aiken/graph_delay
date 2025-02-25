@@ -4,6 +4,7 @@
 
 #include "CustomLookAndFeel.h"
 #include "IntervalButtons.h"
+#include "IntervalComboBox.h"
 #include "PluginProcessor.h"
 #include "RotaryWithLabel.h"
 #include "XyGraph.h"
@@ -21,12 +22,13 @@ private:
     PluginProcessor&  processor_ref_;
     CustomLookAndFeel lnf_;
 
-    RotaryWithLabel time_rotary_;
-    RotaryWithLabel feedback_rotary_;
-    RotaryWithLabel wet_rotary_;
-    RotaryWithLabel dry_rotary_;
-    XyGraph         xy_graph_;
-    IntervalButtons interval_buttons_;
+    RotaryWithLabel  time_rotary_;
+    RotaryWithLabel  feedback_rotary_;
+    RotaryWithLabel  wet_rotary_;
+    RotaryWithLabel  dry_rotary_;
+    XyGraph          xy_graph_;
+    IntervalButtons  interval_buttons_;
+    IntervalComboBox interval_combo_box_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };
