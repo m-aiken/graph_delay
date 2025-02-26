@@ -5,7 +5,7 @@
 class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    CustomLookAndFeel() = default;
+    CustomLookAndFeel();
 
     // juce::Slider
     void drawRotarySlider(juce::Graphics& g,
@@ -29,18 +29,21 @@ public:
                       int             button_h,
                       juce::ComboBox& combo_box) override;
 
-    juce::Label* createComboBoxTextBox(juce::ComboBox& combo_box) override;
-
-    void positionComboBoxText(juce::ComboBox& combo_box, juce::Label& label_to_position) override;
+    juce::Label*             createComboBoxTextBox(juce::ComboBox& combo_box) override;
+    void                     positionComboBoxText(juce::ComboBox& combo_box, juce::Label& label_to_position) override;
+    juce::PopupMenu::Options getOptionsForComboBoxPopupMenu(juce::ComboBox& combo_box, juce::Label& label) override;
+    juce::Font               getComboBoxFont(juce::ComboBox& combo_box) override;
 
     // juce::Label
     void drawLabel(juce::Graphics& g, juce::Label& label) override;
 
-    // juce::PopupMenu
+// juce::PopupMenu
+#if 0
     void drawPopupMenuBackgroundWithOptions(juce::Graphics&                 g,
                                             int                             width,
                                             int                             height,
                                             const juce::PopupMenu::Options& options) override;
+#endif
 
     void drawPopupMenuItemWithOptions(juce::Graphics&                 g,
                                       const juce::Rectangle< int >&   area,
@@ -48,7 +51,8 @@ public:
                                       const juce::PopupMenu::Item&    item,
                                       const juce::PopupMenu::Options& options) override;
 
-    int getPopupMenuBorderSize() override;
+    int        getPopupMenuBorderSize() override;
+    juce::Font getPopupMenuFont() override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CustomLookAndFeel)
 };

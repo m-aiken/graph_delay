@@ -4,6 +4,14 @@
 /*---------------------------------------------------------------------------
 **
 */
+CustomLookAndFeel::CustomLookAndFeel()
+{
+    setColour(juce::PopupMenu::backgroundColourId, juce::Colours::white.withAlpha(0.f));  // Completely transparent.
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 void
 CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
                                     int             x,
@@ -73,7 +81,6 @@ CustomLookAndFeel::createComboBoxTextBox(juce::ComboBox& combo_box)
     auto* label = new juce::Label();
 
     label->setFont(Theme::getFont());
-    label->setColour(juce::Label::textColourId, Theme::getColour(Theme::BLUE));
     label->setJustificationType(juce::Justification::centred);
     label->setEditable(false);
 
@@ -92,12 +99,32 @@ CustomLookAndFeel::positionComboBoxText(juce::ComboBox& combo_box, juce::Label& 
 /*---------------------------------------------------------------------------
 **
 */
+juce::PopupMenu::Options
+CustomLookAndFeel::getOptionsForComboBoxPopupMenu(juce::ComboBox& combo_box, juce::Label& label)
+{
+    return PopupMenu::Options().withTargetComponent(combo_box);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+juce::Font
+CustomLookAndFeel::getComboBoxFont(juce::ComboBox& combo_box)
+{
+    return Theme::getFont();
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
 void
 CustomLookAndFeel::drawLabel(juce::Graphics& g, juce::Label& label)
 {
+    g.setColour(Theme::getColour(Theme::BLUE));
+    g.setFont(Theme::getFont());
     g.drawFittedText(label.getText(), g.getClipBounds(), juce::Justification::centred, 1);
 }
-
+#if 0
 /*---------------------------------------------------------------------------
 **
 */
@@ -107,9 +134,8 @@ CustomLookAndFeel::drawPopupMenuBackgroundWithOptions(juce::Graphics&           
                                                       int                             height,
                                                       const juce::PopupMenu::Options& options)
 {
-    g.fillAll(Theme::getColour(Theme::EGGSHELL));
-    g.fillAll(Theme::getColour(Theme::GREEN).withAlpha(0.1f));
 }
+#endif
 
 /*---------------------------------------------------------------------------
 **
@@ -121,11 +147,13 @@ CustomLookAndFeel::drawPopupMenuItemWithOptions(juce::Graphics&                 
                                                 const juce::PopupMenu::Item&    item,
                                                 const juce::PopupMenu::Options& options)
 {
-    const float alpha = is_highlighted ? 0.2f : 0.1f;
+    const float alpha = is_highlighted ? 0.1f : 0.05f;
 
-    g.fillAll(Theme::getColour(Theme::EGGSHELL));
+    // Background.
     g.fillAll(Theme::getColour(Theme::GREEN).withAlpha(alpha));
-    g.setFont(Theme::getFont());
+
+    // Text.
+    // g.setFont(Theme::getFont());
     g.setColour(Theme::getColour(Theme::BLUE));
     g.drawFittedText(item.text, area, juce::Justification::centred, 1);
 }
@@ -137,6 +165,15 @@ int
 CustomLookAndFeel::getPopupMenuBorderSize()
 {
     return 0;
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+juce::Font
+CustomLookAndFeel::getPopupMenuFont()
+{
+    return Theme::getFont();
 }
 
 /*---------------------------------------------------------------------------
