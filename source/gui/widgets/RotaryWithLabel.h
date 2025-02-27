@@ -2,7 +2,6 @@
 
 #include <JuceHeader.h>
 
-#include "CustomLabel.h"
 #include "GlobalConstants.h"
 #include "RotaryControl.h"
 
@@ -17,7 +16,7 @@ public:
 
 private:
     RotaryControl rotary_;
-    CustomLabel   label_;
+    juce::Label   label_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotaryWithLabel)
 };

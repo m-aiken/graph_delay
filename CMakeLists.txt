@@ -43,7 +43,6 @@ set(PROJECT_SOURCES
         source/gui/interval_control/IntervalButtons.cpp
         source/gui/interval_control/IntervalComboBox.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
-        source/gui/widgets/CustomLabel.cpp
         source/gui/widgets/CustomToggleButton.cpp
         source/gui/widgets/RotaryControl.cpp
         source/gui/widgets/RotaryWithLabel.cpp
@@ -61,7 +60,6 @@ set(PROJECT_HEADERS
         source/gui/interval_control/IntervalComboBox.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
-        source/gui/widgets/CustomLabel.h
         source/gui/widgets/CustomToggleButton.h
         source/gui/widgets/RotaryControl.h
         source/gui/widgets/RotaryWithLabel.h

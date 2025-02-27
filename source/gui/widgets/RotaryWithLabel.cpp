@@ -5,7 +5,7 @@
 */
 RotaryWithLabel::RotaryWithLabel(juce::AudioProcessorValueTreeState& apvts, const DelayParams::ParamId& param_id)
     : rotary_(apvts, param_id)
-    , label_(param_id)
+    , label_(param_id + "_label", param_id)
 {
     addAndMakeVisible(rotary_);
     addAndMakeVisible(label_);
