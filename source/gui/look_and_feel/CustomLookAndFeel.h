@@ -51,8 +51,9 @@ public:
                                       const juce::PopupMenu::Item&    item,
                                       const juce::PopupMenu::Options& options) override;
 
-    int        getPopupMenuBorderSize() override;
-    juce::Font getPopupMenuFont() override;
+    int              getPopupMenuBorderSize() override;
+    juce::Font       getPopupMenuFont() override;
+    juce::Component* getParentComponentForMenuOptions(const juce::PopupMenu::Options& options) override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CustomLookAndFeel)
 };

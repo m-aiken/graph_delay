@@ -153,7 +153,7 @@ CustomLookAndFeel::drawPopupMenuItemWithOptions(juce::Graphics&                 
     g.fillAll(Theme::getColour(Theme::GREEN).withAlpha(alpha));
 
     // Text.
-    // g.setFont(Theme::getFont());
+    g.setFont(Theme::getFont());
     g.setColour(Theme::getColour(Theme::BLUE));
     g.drawFittedText(item.text, area, juce::Justification::centred, 1);
 }
@@ -174,6 +174,25 @@ juce::Font
 CustomLookAndFeel::getPopupMenuFont()
 {
     return Theme::getFont();
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+juce::Component*
+CustomLookAndFeel::getParentComponentForMenuOptions(const juce::PopupMenu::Options& options)
+{
+    if (auto* comp = options.getParentComponent()) {
+        return comp;
+    }
+
+    if (auto* target_comp = options.getTargetComponent()) {
+        if (auto* editor = target_comp->findParentComponentOfClass< AudioProcessorEditor >()) {
+            return editor;
+        }
+    }
+
+    return LookAndFeel_V4::getParentComponentForMenuOptions(options);
 }
 
 /*---------------------------------------------------------------------------
