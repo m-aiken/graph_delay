@@ -123,10 +123,10 @@ PluginProcessor::changeProgramName(int index, const juce::String& new_name)
 void
 PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 {
-    delay_time_      = getParamValue(DelayParams::TIME);
-    delay_feedback_  = getParamValue(DelayParams::FEEDBACK);
-    delay_wet_level_ = juce::Decibels::decibelsToGain(getParamValue(DelayParams::WET_LEVEL));
-    delay_dry_level_ = juce::Decibels::decibelsToGain(getParamValue(DelayParams::DRY_LEVEL));
+    delay_time_      = getParamValue(Gui::Params::TIME);
+    delay_feedback_  = getParamValue(Gui::Params::FEEDBACK);
+    delay_wet_level_ = juce::Decibels::decibelsToGain(getParamValue(Gui::Params::WET_LEVEL));
+    delay_dry_level_ = juce::Decibels::decibelsToGain(getParamValue(Gui::Params::DRY_LEVEL));
 
     const int input_channels = getTotalNumInputChannels();
 
@@ -193,10 +193,10 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         for (int sample_index = 0; sample_index < buffer.getNumSamples(); ++sample_index) {
             const float input_sample = buffer.getSample(channel, sample_index);
 
-            delay_time_      = getParamValue(DelayParams::TIME);
-            delay_feedback_  = getParamValue(DelayParams::FEEDBACK);
-            delay_wet_level_ = juce::Decibels::decibelsToGain(getParamValue(DelayParams::WET_LEVEL));
-            delay_dry_level_ = juce::Decibels::decibelsToGain(getParamValue(DelayParams::DRY_LEVEL));
+            delay_time_      = getParamValue(Gui::Params::TIME);
+            delay_feedback_  = getParamValue(Gui::Params::FEEDBACK);
+            delay_wet_level_ = juce::Decibels::decibelsToGain(getParamValue(Gui::Params::WET_LEVEL));
+            delay_dry_level_ = juce::Decibels::decibelsToGain(getParamValue(Gui::Params::DRY_LEVEL));
 
             smoothed_delay_times_.at(channel).setTargetValue(delay_time_);
             delay_time_ = smoothed_delay_times_.at(channel).getNextValue();
@@ -269,7 +269,7 @@ PluginProcessor::getApvts()
 **
 */
 float
-PluginProcessor::getParamValue(const DelayParams::ParamId& param_id) const
+PluginProcessor::getParamValue(const Gui::Params::ParamId& param_id) const
 {
     const juce::RangedAudioParameter* param = apvts_.getParameter(param_id);
 
@@ -300,30 +300,82 @@ PluginProcessor::getParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
-    const juce::NormalisableRange< float > time_range(DelayParams::DELAY_MS_MIN, DelayParams::DELAY_MS_MAX, 1.f);
-    const juce::NormalisableRange< float > feedback_range(DelayParams::FEEDBACK_MIN, DelayParams::FEEDBACK_MAX, 0.01f);
-    const juce::NormalisableRange< float > wet_range(DelayParams::DB_MIN, DelayParams::DB_MAX, 1.f);
-    const juce::NormalisableRange< float > dry_range(DelayParams::DB_MIN, DelayParams::DB_MAX, 1.f);
+    const juce::NormalisableRange< float > time_range(Gui::Params::DELAY_MS_MIN,
+                                                      Gui::Params::DELAY_MS_MAX,
+                                                      Gui::Params::DELAY_INTERVAL);
 
-    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(DelayParams::TIME, 1),
-                                                             DelayParams::TIME,
+    const juce::NormalisableRange< float > feedback_range(Gui::Params::FEEDBACK_MIN,
+                                                          Gui::Params::FEEDBACK_MAX,
+                                                          Gui::Params::FEEDBACK_INTERVAL);
+
+    const juce::NormalisableRange< float > wet_range(Gui::Params::DB_MIN, Gui::Params::DB_MAX, Gui::Params::DB_INTERVAL);
+    const juce::NormalisableRange< float > dry_range(Gui::Params::DB_MIN, Gui::Params::DB_MAX, Gui::Params::DB_INTERVAL);
+
+    juce::StringArray interval_choices;
+
+    for (int i = 0; i < Gui::Params::NUM_INTERVALS; ++i) {
+        interval_choices.add(Gui::Params::getIntervalLabel(static_cast< Gui::Params::INTERVAL >(i)));
+    }
+
+    juce::StringArray time_mode_choices;
+
+    for (int i = 0; i < Gui::Params::NUM_TIME_MODE_OPTIONS; ++i) {
+        time_mode_choices.add(Gui::Params::getTimeModeLabel(static_cast< Gui::Params::TIME_MODE_OPTION >(i)));
+    }
+
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(Gui::Params::TIME, 1),
+                                                             Gui::Params::TIME,
                                                              time_range,
-                                                             DelayParams::DELAY_MS_DEFAULT));
+                                                             Gui::Params::DELAY_MS_DEFAULT));
 
-    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(DelayParams::FEEDBACK, 1),
-                                                             DelayParams::FEEDBACK,
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(Gui::Params::FEEDBACK, 1),
+                                                             Gui::Params::FEEDBACK,
                                                              feedback_range,
-                                                             DelayParams::FEEDBACK_DEFAULT));
+                                                             Gui::Params::FEEDBACK_DEFAULT));
 
-    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(DelayParams::WET_LEVEL, 1),
-                                                             DelayParams::WET_LEVEL,
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(Gui::Params::WET_LEVEL, 1),
+                                                             Gui::Params::WET_LEVEL,
                                                              wet_range,
-                                                             DelayParams::DB_DEFAULT_WET_LEVEL));
+                                                             Gui::Params::DB_DEFAULT_WET_LEVEL));
 
-    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(DelayParams::DRY_LEVEL, 1),
-                                                             DelayParams::DRY_LEVEL,
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(Gui::Params::DRY_LEVEL, 1),
+                                                             Gui::Params::DRY_LEVEL,
                                                              dry_range,
-                                                             0.f));
+                                                             Gui::Params::DB_DEFAULT_DRY_LEVEL));
+
+    layout.add(std::make_unique< juce::AudioParameterChoice >(juce::ParameterID(Gui::Params::TIME_MODE, 1),
+                                                              Gui::Params::TIME_MODE,
+                                                              time_mode_choices,
+                                                              Gui::Params::DEFAULT_TIME_MODE));
+
+    layout.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(Gui::Params::TEMPO, 1),
+                                                           Gui::Params::TEMPO,
+                                                           Gui::Params::TEMPO_MIN,
+                                                           Gui::Params::TEMPO_MAX,
+                                                           Gui::Params::TEMPO_DEFAULT));
+
+    layout.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(Gui::Params::TIME_SIG_NUMERATOR, 1),
+                                                           Gui::Params::TIME_SIG_NUMERATOR,
+                                                           Gui::Params::TIME_SIG_NTOR_MIN,
+                                                           Gui::Params::TIME_SIG_NTOR_MAX,
+                                                           Gui::Params::TIME_SIG_NTOR_DEFAULT));
+
+    layout.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(Gui::Params::TIME_SIG_DENOMINATOR, 1),
+                                                           Gui::Params::TIME_SIG_DENOMINATOR,
+                                                           Gui::Params::TIME_SIG_DTOR_MIN,
+                                                           Gui::Params::TIME_SIG_DTOR_MAX,
+                                                           Gui::Params::TIME_SIG_DTOR_DEFAULT));
+
+    layout.add(std::make_unique< juce::AudioParameterChoice >(juce::ParameterID(Gui::Params::RHYTHMIC_INTERVAL, 1),
+                                                              Gui::Params::RHYTHMIC_INTERVAL,
+                                                              interval_choices,
+                                                              Gui::Params::INTERVAL_1_4));
+
+    layout.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(Gui::Params::DISCRETE_TIME, 1),
+                                                           Gui::Params::DISCRETE_TIME,
+                                                           Gui::Params::FIRST_INTERVAL,
+                                                           Gui::Params::LAST_INTERVAL,
+                                                           Gui::Params::INTERVAL_1_4));
 
     return layout;
 }

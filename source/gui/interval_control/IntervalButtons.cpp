@@ -5,12 +5,12 @@
 */
 IntervalButtons::IntervalButtons()
 {
-    for (size_t i = 0; i < IntervalParams::NUM_INTERVALS; ++i) {
-        const auto interval = static_cast< IntervalParams::INTERVAL >(i);
+    for (size_t i = 0; i < Gui::Params::NUM_INTERVALS; ++i) {
+        const auto interval = static_cast< Gui::Params::INTERVAL >(i);
 
         buttons_.at(i) = std::make_unique< IntervalButton >(interval);
 
-        buttons_.at(i)->setToggleState(interval == IntervalParams::DEFAULT_INTERVAL, juce::dontSendNotification);
+        buttons_.at(i)->setToggleState(interval == Gui::Params::DEFAULT_INTERVAL, juce::dontSendNotification);
 
         addAndMakeVisible(buttons_.at(i).get());
     }

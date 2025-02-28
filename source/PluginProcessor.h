@@ -36,7 +36,7 @@ public:
     void setStateInformation(const void* data, int size_in_bytes) override;
 
     juce::AudioProcessorValueTreeState& getApvts();
-    float                               getParamValue(const DelayParams::ParamId& param_id) const;
+    float                               getParamValue(const Gui::Params::ParamId& param_id) const;
 
 private:
     float processDelay(const int channel, const float input_sample);

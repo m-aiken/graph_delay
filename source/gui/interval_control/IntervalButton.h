@@ -8,10 +8,10 @@
 class IntervalButton : public CustomToggleButton
 {
 public:
-    explicit IntervalButton(const IntervalParams::INTERVAL& interval);
+    explicit IntervalButton(const Gui::Params::INTERVAL& interval);
 
 private:
-    const IntervalParams::INTERVAL interval_;
+    const Gui::Params::INTERVAL interval_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IntervalButton)
 };

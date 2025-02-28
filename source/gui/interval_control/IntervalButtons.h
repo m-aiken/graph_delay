@@ -13,7 +13,7 @@ public:
     void resized() override;
 
 private:
-    std::array< std::unique_ptr< IntervalButton >, IntervalParams::NUM_INTERVALS > buttons_;
+    std::array< std::unique_ptr< IntervalButton >, Gui::Params::NUM_INTERVALS > buttons_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IntervalButtons)
 };

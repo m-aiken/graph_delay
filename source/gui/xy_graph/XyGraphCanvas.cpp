@@ -1,3 +1,4 @@
+#include "GlobalConstants.h"
 #include "Theme.h"
 #include "XyGraphCanvas.h"
 
@@ -13,11 +14,11 @@ XyGraphCanvas::paint(juce::Graphics& g)
     // Dots.
     g.setColour(Theme::getColour(Theme::BLUE).withAlpha(0.2f));
 
-    const auto increment = getLocalBounds().getWidth() / GRID_DIAMETER;
+    const auto num_dots = getLocalBounds().getWidth() / Gui::UI_MULTIPLE;
 
-    for (auto x = 1; x < GRID_DIAMETER; ++x) {
-        for (auto y = 1; y < GRID_DIAMETER; ++y) {
-            g.drawRect((increment * x) - 1, (increment * y) - 1, 2, 2);
+    for (auto x = 1; x < num_dots; ++x) {
+        for (auto y = 1; y < num_dots; ++y) {
+            g.drawRect((Gui::UI_MULTIPLE * x) - 1, (Gui::UI_MULTIPLE * y) - 1, 2, 2);
         }
     }
 }

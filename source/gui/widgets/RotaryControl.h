@@ -9,16 +9,18 @@ class RotaryControl
     , public juce::AudioProcessorParameter::Listener
 {
 public:
-    RotaryControl(juce::AudioProcessorValueTreeState& apvts, const DelayParams::ParamId& param_id);
+    RotaryControl(juce::AudioProcessorValueTreeState& apvts, const Gui::Params::ParamId& param_id);
     ~RotaryControl() override;
 
     void paint(juce::Graphics& g) override;
-    void mouseEnter(const MouseEvent& event) override;
+    void mouseEnter(const juce::MouseEvent& event) override;
 
     void parameterValueChanged(int parameter_index, float new_value) override;
     void parameterGestureChanged(int parameter_index, bool gesture_is_starting) override;
 
-private:
+protected:
+    [[nodiscard]] virtual float getValueToDraw() const;
+
     typedef juce::AudioProcessorValueTreeState::SliderAttachment ApvtsAttachment;
 
     juce::RangedAudioParameter*        param_;

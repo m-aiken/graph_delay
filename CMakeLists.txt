@@ -45,7 +45,9 @@ set(PROJECT_SOURCES
         source/gui/look_and_feel/CustomLookAndFeel.cpp
         source/gui/widgets/CustomToggleButton.cpp
         source/gui/widgets/RotaryControl.cpp
-        source/gui/widgets/RotaryWithLabel.cpp
+        source/gui/widgets/interval_selector/AnnotatedIntervalControl.cpp
+        source/gui/widgets/interval_selector/IntervalAnnotations.cpp
+        source/gui/widgets/interval_selector/IntervalControl.cpp
         source/gui/xy_graph/XyGraph.cpp
         source/gui/xy_graph/XyGraphCanvas.cpp
         source/gui/xy_graph/XyGraphOverlay.cpp
@@ -62,7 +64,9 @@ set(PROJECT_HEADERS
         source/gui/look_and_feel/Theme.h
         source/gui/widgets/CustomToggleButton.h
         source/gui/widgets/RotaryControl.h
-        source/gui/widgets/RotaryWithLabel.h
+        source/gui/widgets/interval_selector/AnnotatedIntervalControl.h
+        source/gui/widgets/interval_selector/IntervalAnnotations.h
+        source/gui/widgets/interval_selector/IntervalControl.h
         source/gui/xy_graph/XyGraph.h
         source/gui/xy_graph/XyGraphCanvas.h
         source/gui/xy_graph/XyGraphOverlay.h
@@ -82,6 +86,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/interval_control
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets/interval_selector
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/xy_graph
         ${CMAKE_CURRENT_SOURCE_DIR}/source/utility
 )

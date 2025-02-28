@@ -2,11 +2,12 @@
 
 #include <JuceHeader.h>
 
+#include "AnnotatedIntervalControl.h"
 #include "CustomLookAndFeel.h"
 #include "IntervalButtons.h"
 #include "IntervalComboBox.h"
 #include "PluginProcessor.h"
-#include "RotaryWithLabel.h"
+#include "RotaryControl.h"
 #include "XyGraph.h"
 
 class PluginEditor : public juce::AudioProcessorEditor
@@ -19,13 +20,22 @@ public:
     void resized() override;
 
 private:
+    [[nodiscard]] static juce::Rectangle< int > getRotaryLabelBounds(const RotaryControl& rotary_to_annotate);
+
     PluginProcessor&  processor_ref_;
     CustomLookAndFeel lnf_;
 
-    RotaryWithLabel  time_rotary_;
-    RotaryWithLabel  feedback_rotary_;
-    RotaryWithLabel  wet_rotary_;
-    RotaryWithLabel  dry_rotary_;
+    AnnotatedIntervalControl discrete_time_rotary_;
+
+    RotaryControl time_rotary_;
+    juce::Label   time_label_;
+    RotaryControl feedback_rotary_;
+    juce::Label   feedback_label_;
+    RotaryControl wet_rotary_;
+    juce::Label   wet_label_;
+    RotaryControl dry_rotary_;
+    juce::Label   dry_label_;
+
     XyGraph          xy_graph_;
     IntervalButtons  interval_buttons_;
     IntervalComboBox interval_combo_box_;

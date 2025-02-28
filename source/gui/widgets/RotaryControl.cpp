@@ -3,7 +3,7 @@
 /*---------------------------------------------------------------------------
 **
 */
-RotaryControl::RotaryControl(juce::AudioProcessorValueTreeState& apvts, const DelayParams::ParamId& param_id)
+RotaryControl::RotaryControl(juce::AudioProcessorValueTreeState& apvts, const Gui::Params::ParamId& param_id)
     : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox)
     , param_(apvts.getParameter(param_id))
 {
@@ -16,6 +16,8 @@ RotaryControl::RotaryControl(juce::AudioProcessorValueTreeState& apvts, const De
 
         setRange(range.start, range.end);
     }
+
+    setAlwaysOnTop(true);
 }
 
 /*---------------------------------------------------------------------------
@@ -34,36 +36,21 @@ RotaryControl::~RotaryControl()
 void
 RotaryControl::paint(juce::Graphics& g)
 {
-    if (param_ == nullptr) {
-        return;
-    }
+    const auto& bounds = getLocalBounds();
 
-    const auto& bounds       = getLocalBounds();
-    const auto  diameter     = std::min(bounds.getWidth(), bounds.getHeight());
-    const auto  radius       = static_cast< int >(std::floor(diameter * 0.5));
-    const auto& range        = getRange();
-    const auto value_to_draw = juce::jmap< double >(getValue(), range.getStart(), range.getEnd(), START_ANGLE, END_ANGLE);
-
-    getLookAndFeel().drawRotarySlider(g,
-                                      (bounds.getCentreX() - radius),
-                                      (bounds.getCentreY() - radius),
-                                      diameter,
-                                      diameter,
-                                      static_cast< float >(value_to_draw),
-                                      START_ANGLE,
-                                      END_ANGLE,
-                                      *this);
+    getLookAndFeel()
+        .drawRotarySlider(g, 0, 0, bounds.getWidth(), bounds.getHeight(), getValueToDraw(), START_ANGLE, END_ANGLE, *this);
 }
 
 /*---------------------------------------------------------------------------
 **
 */
 void
-RotaryControl::mouseEnter(const MouseEvent& event)
+RotaryControl::mouseEnter(const juce::MouseEvent& event)
 {
-    juce::ignoreUnused(event);
-
     setMouseCursor(juce::MouseCursor::UpDownLeftRightResizeCursor);
+
+    juce::Slider::mouseEnter(event);
 }
 
 /*---------------------------------------------------------------------------
@@ -87,6 +74,21 @@ RotaryControl::parameterGestureChanged(int parameter_index, bool gesture_is_star
 {
     // Only implemented because it's pure virtual.
     juce::ignoreUnused(parameter_index, gesture_is_starting);
+}
+
+/*---------------------------------------------------------------------------
+**
+*/
+float
+RotaryControl::getValueToDraw() const
+{
+    if (param_ == nullptr) {
+        return START_ANGLE;
+    }
+
+    const auto& range = getRange();
+
+    return juce::jmap< float >(static_cast< float >(getValue()), range.getStart(), range.getEnd(), START_ANGLE, END_ANGLE);
 }
 
 /*---------------------------------------------------------------------------
