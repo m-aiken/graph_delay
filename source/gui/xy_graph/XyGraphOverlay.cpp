@@ -5,8 +5,10 @@
 **
 */
 XyGraphOverlay::XyGraphOverlay(PluginProcessor& processor_ref)
-    : processor_ref_(processor_ref)
 {
+    x_.referTo(processor_ref.getApvts().getParameterAsValue(Gui::Params::TIME));
+    y_.referTo(processor_ref.getApvts().getParameterAsValue(Gui::Params::FEEDBACK));
+
     setAlwaysOnTop(true);
 }
 
@@ -16,21 +18,8 @@ XyGraphOverlay::XyGraphOverlay(PluginProcessor& processor_ref)
 void
 XyGraphOverlay::mouseDrag(const juce::MouseEvent& event)
 {
-    juce::RangedAudioParameter* time_param     = processor_ref_.getApvts().getParameter(Gui::Params::TIME);
-    juce::RangedAudioParameter* feedback_param = processor_ref_.getApvts().getParameter(Gui::Params::FEEDBACK);
-
-    if (time_param != nullptr && feedback_param != nullptr) {
-        const float time     = getParameterValueFromXCoordinate(event.getPosition().getX());
-        const float feedback = getParameterValueFromYCoordinate(event.getPosition().getY());
-
-        time_param->beginChangeGesture();
-        time_param->setValueNotifyingHost(time_param->convertTo0to1(time));
-        time_param->endChangeGesture();
-
-        feedback_param->beginChangeGesture();
-        feedback_param->setValueNotifyingHost(feedback_param->convertTo0to1(feedback));
-        feedback_param->endChangeGesture();
-    }
+    x_ = getParameterValueFromXCoordinate(event.getPosition().getX());
+    y_ = getParameterValueFromYCoordinate(event.getPosition().getY());
 }
 
 /*---------------------------------------------------------------------------

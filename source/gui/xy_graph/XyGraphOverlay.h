@@ -18,7 +18,8 @@ private:
     static constexpr int MIN_VALID_COORDINATE = Gui::THUMB_DIAMETER;
     static constexpr int MAX_VALID_COORDINATE = Gui::GRAPH_DIAMETER - Gui::THUMB_DIAMETER;
 
-    PluginProcessor& processor_ref_;
+    juce::Value x_;
+    juce::Value y_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(XyGraphOverlay)
 };
