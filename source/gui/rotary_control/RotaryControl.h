@@ -21,13 +21,14 @@ public:
 protected:
     [[nodiscard]] virtual float getValueToDraw() const;
 
-    typedef juce::AudioProcessorValueTreeState::SliderAttachment ApvtsAttachment;
-
-    juce::RangedAudioParameter*        param_;
-    std::unique_ptr< ApvtsAttachment > slider_attachment_;
-
     static constexpr float START_ANGLE = juce::degreesToRadians(180.f + 45.f);
     static constexpr float END_ANGLE   = juce::degreesToRadians(180.f - 45.f) + juce::MathConstants< float >::twoPi;
+
+    juce::RangedAudioParameter* param_;
+
+private:
+    typedef juce::AudioProcessorValueTreeState::SliderAttachment ApvtsAttachment;
+    std::unique_ptr< ApvtsAttachment >                           slider_attachment_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotaryControl)
 };

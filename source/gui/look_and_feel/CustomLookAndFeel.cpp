@@ -25,11 +25,11 @@ CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
 {
     const auto bounds = juce::Rectangle< int >(x, y, width, height).toFloat();
 
-    // Background.
-    g.setColour(Theme::getColour(Theme::SALMON));
-    g.fillEllipse(bounds);
+    // The background is transparent.
+    // Because the drawing of the rotary shadow is expensive, we draw a static image
+    // as the rotary background and then draw the position pointer over it dynamically.
 
-    // Thumb/Pointer.
+    // Position pointer.
     juce::Rectangle< float > thumb;
     juce::Path               path;
     const auto               centre = bounds.getCentre();

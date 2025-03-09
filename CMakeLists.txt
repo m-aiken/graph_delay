@@ -43,8 +43,10 @@ set(PROJECT_SOURCES
         source/gui/interval_control/IntervalButtons.cpp
         source/gui/interval_control/IntervalComboBox.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
+        source/gui/rotary_control/RotaryControl.cpp
+        source/gui/rotary_control/RotaryGroup.cpp
+        source/gui/rotary_control/RotaryShadow.cpp
         source/gui/widgets/CustomToggleButton.cpp
-        source/gui/widgets/RotaryControl.cpp
         source/gui/widgets/interval_selector/AnnotatedIntervalControl.cpp
         source/gui/widgets/interval_selector/IntervalAnnotations.cpp
         source/gui/widgets/interval_selector/IntervalControl.cpp
@@ -62,8 +64,10 @@ set(PROJECT_HEADERS
         source/gui/interval_control/IntervalComboBox.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
+        source/gui/rotary_control/RotaryControl.h
+        source/gui/rotary_control/RotaryGroup.h
+        source/gui/rotary_control/RotaryShadow.h
         source/gui/widgets/CustomToggleButton.h
-        source/gui/widgets/RotaryControl.h
         source/gui/widgets/interval_selector/AnnotatedIntervalControl.h
         source/gui/widgets/interval_selector/IntervalAnnotations.h
         source/gui/widgets/interval_selector/IntervalControl.h
@@ -85,6 +89,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/source
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/interval_control
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/look_and_feel
+        ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/rotary_control
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/widgets/interval_selector
         ${CMAKE_CURRENT_SOURCE_DIR}/source/gui/xy_graph

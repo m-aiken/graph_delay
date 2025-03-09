@@ -7,7 +7,7 @@
 #include "IntervalButtons.h"
 #include "IntervalComboBox.h"
 #include "PluginProcessor.h"
-#include "RotaryControl.h"
+#include "RotaryGroup.h"
 #include "XyGraph.h"
 
 class PluginEditor : public juce::AudioProcessorEditor
@@ -27,14 +27,10 @@ private:
 
     AnnotatedIntervalControl discrete_time_rotary_;
 
-    RotaryControl time_rotary_;
-    juce::Label   time_label_;
-    RotaryControl feedback_rotary_;
-    juce::Label   feedback_label_;
-    RotaryControl wet_rotary_;
-    juce::Label   wet_label_;
-    RotaryControl dry_rotary_;
-    juce::Label   dry_label_;
+    RotaryGroup time_control_;
+    RotaryGroup feedback_control_;
+    RotaryGroup wet_control_;
+    RotaryGroup dry_control_;
 
     XyGraph          xy_graph_;
     IntervalButtons  interval_buttons_;
