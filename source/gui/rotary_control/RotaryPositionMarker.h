@@ -4,13 +4,13 @@
 
 #include "GlobalConstants.h"
 
-class RotaryControl
+class RotaryPositionMarker
     : public juce::Slider
     , public juce::AudioProcessorParameter::Listener
 {
 public:
-    RotaryControl(juce::AudioProcessorValueTreeState& apvts, const Gui::Params::ParamId& param_id);
-    ~RotaryControl() override;
+    RotaryPositionMarker(juce::AudioProcessorValueTreeState& apvts, const Gui::Params::ParamId& param_id);
+    ~RotaryPositionMarker() override;
 
     void paint(juce::Graphics& g) override;
     void mouseEnter(const juce::MouseEvent& event) override;
@@ -30,5 +30,5 @@ private:
     typedef juce::AudioProcessorValueTreeState::SliderAttachment ApvtsAttachment;
     std::unique_ptr< ApvtsAttachment >                           slider_attachment_;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotaryControl)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotaryPositionMarker)
 };

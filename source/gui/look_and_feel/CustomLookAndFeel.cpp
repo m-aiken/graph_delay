@@ -29,7 +29,7 @@ CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
     // Because the drawing of the rotary shadow is expensive, we draw a static image
     // as the rotary background and then draw the position pointer over it dynamically.
 
-    // Position pointer.
+    // Position marker.
     juce::Rectangle< float > thumb;
     juce::Path               path;
     const auto               centre = bounds.getCentre();
@@ -37,12 +37,12 @@ CustomLookAndFeel::drawRotarySlider(juce::Graphics& g,
     thumb.setLeft(centre.getX() - 3);
     thumb.setRight(centre.getX() + 3);
     thumb.setTop(bounds.getY() + 6);
-    thumb.setBottom(bounds.getY() + 16);
+    thumb.setBottom(bounds.getY() + 12);
 
     path.addRoundedRectangle(thumb, 2.f);
     path.applyTransform(juce::AffineTransform().rotated(slider_pos_proportional, centre.getX(), centre.getY()));
 
-    g.setColour(Theme::getColour(Theme::BLUE));
+    g.setColour(Theme::getColour(Theme::EGGSHELL).withAlpha(0.6f));
     g.fillPath(path);
 }
 
@@ -61,7 +61,7 @@ CustomLookAndFeel::drawComboBox(juce::Graphics& g,
                                 juce::ComboBox& combo_box)
 {
     // Background.
-    g.fillAll(Theme::getColour(Theme::GREEN).withAlpha(0.1f));
+    g.fillAll(Theme::getColour(Theme::LIGHT_BLUE).withAlpha(0.1f));
 
     juce::String text = combo_box.getText();
 
@@ -120,7 +120,7 @@ CustomLookAndFeel::getComboBoxFont(juce::ComboBox& combo_box)
 void
 CustomLookAndFeel::drawLabel(juce::Graphics& g, juce::Label& label)
 {
-    g.setColour(Theme::getColour(Theme::BLUE));
+    g.setColour(Theme::getColour(Theme::DARK_BLUE));
     g.setFont(Theme::getFont());
     g.drawFittedText(label.getText(), g.getClipBounds(), juce::Justification::centred, 1);
 }
@@ -150,11 +150,11 @@ CustomLookAndFeel::drawPopupMenuItemWithOptions(juce::Graphics&                 
     const float alpha = is_highlighted ? 0.1f : 0.05f;
 
     // Background.
-    g.fillAll(Theme::getColour(Theme::GREEN).withAlpha(alpha));
+    g.fillAll(Theme::getColour(Theme::LIGHT_BLUE).withAlpha(alpha));
 
     // Text.
     g.setFont(Theme::getFont());
-    g.setColour(Theme::getColour(Theme::BLUE));
+    g.setColour(Theme::getColour(Theme::DARK_BLUE));
     g.drawFittedText(item.text, area, juce::Justification::centred, 1);
 }
 

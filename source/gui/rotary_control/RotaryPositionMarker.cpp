@@ -1,9 +1,9 @@
-#include "RotaryControl.h"
+#include "RotaryPositionMarker.h"
 
 /*---------------------------------------------------------------------------
 **
 */
-RotaryControl::RotaryControl(juce::AudioProcessorValueTreeState& apvts, const Gui::Params::ParamId& param_id)
+RotaryPositionMarker::RotaryPositionMarker(juce::AudioProcessorValueTreeState& apvts, const Gui::Params::ParamId& param_id)
     : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox)
     , param_(apvts.getParameter(param_id))
 {
@@ -23,7 +23,7 @@ RotaryControl::RotaryControl(juce::AudioProcessorValueTreeState& apvts, const Gu
 /*---------------------------------------------------------------------------
 **
 */
-RotaryControl::~RotaryControl()
+RotaryPositionMarker::~RotaryPositionMarker()
 {
     if (param_ != nullptr) {
         param_->removeListener(this);
@@ -34,7 +34,7 @@ RotaryControl::~RotaryControl()
 **
 */
 void
-RotaryControl::paint(juce::Graphics& g)
+RotaryPositionMarker::paint(juce::Graphics& g)
 {
     const auto& bounds = getLocalBounds();
 
@@ -46,7 +46,7 @@ RotaryControl::paint(juce::Graphics& g)
 **
 */
 void
-RotaryControl::mouseEnter(const juce::MouseEvent& event)
+RotaryPositionMarker::mouseEnter(const juce::MouseEvent& event)
 {
     setMouseCursor(juce::MouseCursor::UpDownLeftRightResizeCursor);
 
@@ -57,7 +57,7 @@ RotaryControl::mouseEnter(const juce::MouseEvent& event)
 **
 */
 void
-RotaryControl::parameterValueChanged(int parameter_index, float new_value)
+RotaryPositionMarker::parameterValueChanged(int parameter_index, float new_value)
 {
     juce::ignoreUnused(parameter_index, new_value);
 
@@ -70,7 +70,7 @@ RotaryControl::parameterValueChanged(int parameter_index, float new_value)
 **
 */
 void
-RotaryControl::parameterGestureChanged(int parameter_index, bool gesture_is_starting)
+RotaryPositionMarker::parameterGestureChanged(int parameter_index, bool gesture_is_starting)
 {
     // Only implemented because it's pure virtual.
     juce::ignoreUnused(parameter_index, gesture_is_starting);
@@ -80,7 +80,7 @@ RotaryControl::parameterGestureChanged(int parameter_index, bool gesture_is_star
 **
 */
 float
-RotaryControl::getValueToDraw() const
+RotaryPositionMarker::getValueToDraw() const
 {
     if (param_ == nullptr) {
         return START_ANGLE;

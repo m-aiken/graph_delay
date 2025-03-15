@@ -9,10 +9,9 @@ public:
 
     enum COLOUR {
         EGGSHELL,
-        SALMON,
-        BLUE,
-        GREEN,
-        YELLOW,
+        ORANGE,
+        DARK_BLUE,
+        LIGHT_BLUE,
     };
 
     static juce::Colour getColour(const COLOUR& colour)
@@ -21,17 +20,14 @@ public:
         case EGGSHELL:
             return { 244u, 241u, 222u };
 
-        case SALMON:
-            return { 224u, 122u, 95u };
+        case ORANGE:
+            return { 217u, 85u, 50u };
 
-        case BLUE:
-            return { 61u, 64u, 91u };
+        case DARK_BLUE:
+            return { 3u, 31u, 42u };
 
-        case GREEN:
-            return { 129u, 178u, 154u };
-
-        case YELLOW:
-            return { 242u, 204u, 143u };
+        case LIGHT_BLUE:
+            return { 58u, 96u, 112u };
 
         default:
             return { 0, 0, 0 };

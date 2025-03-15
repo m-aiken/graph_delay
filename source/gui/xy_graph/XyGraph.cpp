@@ -6,7 +6,7 @@
 */
 XyGraph::XyGraph(PluginProcessor& processor_ref)
     : processor_ref_(processor_ref)
-    , thumb_shadow_(Theme::getColour(Theme::SALMON).withAlpha(0.6f), SHADOW_RADIUS, juce::Point< int >(0, 0))
+    , thumb_shadow_(juce::Colours::black.withAlpha(0.3f), SHADOW_RADIUS, juce::Point< int >(0, 0))
     , overlay_(processor_ref)
 {
     addAndMakeVisible(canvas_);

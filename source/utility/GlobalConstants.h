@@ -6,8 +6,8 @@ namespace Gui
 {
 
 static constexpr int UI_MULTIPLE     = 16;
-static constexpr int WINDOW_WIDTH    = (UI_MULTIPLE * 50);
-static constexpr int WINDOW_HEIGHT   = (UI_MULTIPLE * 40);
+static constexpr int WINDOW_WIDTH    = (UI_MULTIPLE * 42);
+static constexpr int WINDOW_HEIGHT   = (UI_MULTIPLE * 28);
 static constexpr int GRAPH_DIAMETER  = (UI_MULTIPLE * 20);
 static constexpr int THUMB_DIAMETER  = (UI_MULTIPLE * 1);
 static constexpr int ROTARY_DIAMETER = (UI_MULTIPLE * 6);

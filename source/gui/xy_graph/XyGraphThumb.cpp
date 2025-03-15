@@ -7,7 +7,7 @@
 void
 XyGraphThumb::paint(juce::Graphics& g)
 {
-    g.setColour(Theme::getColour(Theme::SALMON));
+    g.setColour(Theme::getColour(Theme::ORANGE));
     g.fillEllipse(getLocalBounds().toFloat());
 }
 

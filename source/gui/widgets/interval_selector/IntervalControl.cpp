@@ -5,7 +5,7 @@
 **
 */
 IntervalControl::IntervalControl(juce::AudioProcessorValueTreeState& apvts)
-    : RotaryControl(apvts, Gui::Params::DISCRETE_TIME)
+    : RotaryPositionMarker(apvts, Gui::Params::DISCRETE_TIME)
 {
 }
 

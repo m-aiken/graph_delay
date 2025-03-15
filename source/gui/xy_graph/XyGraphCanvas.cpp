@@ -9,10 +9,10 @@ void
 XyGraphCanvas::paint(juce::Graphics& g)
 {
     // Background.
-    g.fillAll(Theme::getColour(Theme::GREEN).withAlpha(0.1f));
+    g.fillAll(Theme::getColour(Theme::LIGHT_BLUE).withAlpha(0.1f));
 
     // Dots.
-    g.setColour(Theme::getColour(Theme::BLUE).withAlpha(0.2f));
+    g.setColour(Theme::getColour(Theme::DARK_BLUE).withAlpha(0.3f));
 
     const auto num_dots = getLocalBounds().getWidth() / Gui::UI_MULTIPLE;
 

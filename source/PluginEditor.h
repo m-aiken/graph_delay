@@ -20,12 +20,8 @@ public:
     void resized() override;
 
 private:
-    [[nodiscard]] static juce::Rectangle< int > getRotaryLabelBounds(const RotaryControl& rotary_to_annotate);
-
     PluginProcessor&  processor_ref_;
     CustomLookAndFeel lnf_;
-
-    AnnotatedIntervalControl discrete_time_rotary_;
 
     RotaryGroup time_control_;
     RotaryGroup feedback_control_;

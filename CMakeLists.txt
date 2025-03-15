@@ -43,9 +43,8 @@ set(PROJECT_SOURCES
         source/gui/interval_control/IntervalButtons.cpp
         source/gui/interval_control/IntervalComboBox.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
-        source/gui/rotary_control/RotaryControl.cpp
         source/gui/rotary_control/RotaryGroup.cpp
-        source/gui/rotary_control/RotaryShadow.cpp
+        source/gui/rotary_control/RotaryPositionMarker.cpp
         source/gui/widgets/CustomToggleButton.cpp
         source/gui/widgets/interval_selector/AnnotatedIntervalControl.cpp
         source/gui/widgets/interval_selector/IntervalAnnotations.cpp
@@ -64,9 +63,8 @@ set(PROJECT_HEADERS
         source/gui/interval_control/IntervalComboBox.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
-        source/gui/rotary_control/RotaryControl.h
         source/gui/rotary_control/RotaryGroup.h
-        source/gui/rotary_control/RotaryShadow.h
+        source/gui/rotary_control/RotaryPositionMarker.h
         source/gui/widgets/CustomToggleButton.h
         source/gui/widgets/interval_selector/AnnotatedIntervalControl.h
         source/gui/widgets/interval_selector/IntervalAnnotations.h
@@ -106,8 +104,12 @@ target_compile_definitions(${PROJECT_NAME}
         JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
         JUCE_VST3_CAN_REPLACE_VST2=0)
 
+juce_add_binary_data(AudioPluginData SOURCES
+        assets/ellipse_blue.png)
+
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
+        AudioPluginData
         juce::juce_audio_utils
         juce::juce_dsp
         PUBLIC

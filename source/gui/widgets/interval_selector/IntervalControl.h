@@ -2,9 +2,9 @@
 
 #include <JuceHeader.h>
 
-#include "RotaryControl.h"
+#include "RotaryPositionMarker.h"
 
-class IntervalControl : public RotaryControl
+class IntervalControl : public RotaryPositionMarker
 {
 public:
     explicit IntervalControl(juce::AudioProcessorValueTreeState& apvts);
