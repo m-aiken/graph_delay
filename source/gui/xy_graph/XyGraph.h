@@ -27,7 +27,7 @@ private:
     XyGraphOverlay   overlay_;
 
     static constexpr int   THUMB_RADIUS  = Gui::THUMB_DIAMETER / 2;
-    static constexpr uint8 SHADOW_RADIUS = 15;
+    static constexpr uint8 SHADOW_RADIUS = Gui::UI_MAGIC_NUMBER;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(XyGraph)
 };

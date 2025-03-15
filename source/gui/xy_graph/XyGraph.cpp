@@ -6,7 +6,7 @@
 */
 XyGraph::XyGraph(PluginProcessor& processor_ref)
     : processor_ref_(processor_ref)
-    , thumb_shadow_(juce::Colours::black.withAlpha(0.3f), SHADOW_RADIUS, juce::Point< int >(0, 0))
+    , thumb_shadow_(Theme::getColour(Theme::DARK_BLUE).withAlpha(0.2f), SHADOW_RADIUS, juce::Point< int >(2, 2))
     , overlay_(processor_ref)
 {
     addAndMakeVisible(canvas_);
@@ -37,7 +37,7 @@ XyGraph::resized()
 {
     const auto bounds = getLocalBounds();
 
-    canvas_.setBounds(bounds.reduced(Gui::UI_MULTIPLE));
+    canvas_.setBounds(bounds.reduced(Gui::UI_MAGIC_NUMBER));
     overlay_.setBounds(bounds);
 }
 

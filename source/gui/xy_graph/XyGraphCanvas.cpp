@@ -9,16 +9,16 @@ void
 XyGraphCanvas::paint(juce::Graphics& g)
 {
     // Background.
-    g.fillAll(Theme::getColour(Theme::LIGHT_BLUE).withAlpha(0.1f));
+    g.fillAll(Theme::getColour(Theme::LIGHT_BLUE).withAlpha(0.15f));
 
     // Dots.
     g.setColour(Theme::getColour(Theme::DARK_BLUE).withAlpha(0.3f));
 
-    const auto num_dots = getLocalBounds().getWidth() / Gui::UI_MULTIPLE;
+    const auto num_dots = getLocalBounds().getWidth() / Gui::UI_MAGIC_NUMBER;
 
     for (auto x = 1; x < num_dots; ++x) {
         for (auto y = 1; y < num_dots; ++y) {
-            g.drawRect((Gui::UI_MULTIPLE * x) - 1, (Gui::UI_MULTIPLE * y) - 1, 2, 2);
+            g.drawRect((Gui::UI_MAGIC_NUMBER * x) - 1, (Gui::UI_MAGIC_NUMBER * y) - 1, 2, 2);
         }
     }
 }

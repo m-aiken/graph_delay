@@ -47,7 +47,8 @@ PluginEditor::~PluginEditor()
 void
 PluginEditor::paint(juce::Graphics& g)
 {
-    g.fillAll(Theme::getColour(Theme::EGGSHELL));
+    g.fillAll(juce::Colours::white);
+    g.fillAll(Theme::getColour(Theme::LIGHT_BLUE).withAlpha(0.85f));
 }
 
 /*---------------------------------------------------------------------------
@@ -63,7 +64,7 @@ PluginEditor::resized()
     const auto graph_x      = xy_graph_.getX();
     const auto graph_right  = xy_graph_.getRight();
 
-    constexpr auto rotary_group_diameter = Gui::ROTARY_DIAMETER + (Gui::UI_MULTIPLE * 4);
+    constexpr auto rotary_group_diameter = Gui::ROTARY_DIAMETER + (Gui::UI_MAGIC_NUMBER * 4);
 
     const auto left_rotary_x   = (graph_x - rotary_group_diameter);
     const auto right_rotary_x  = (graph_right);
