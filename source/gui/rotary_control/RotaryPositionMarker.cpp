@@ -82,10 +82,6 @@ RotaryPositionMarker::parameterGestureChanged(int parameter_index, bool gesture_
 float
 RotaryPositionMarker::getValueToDraw() const
 {
-    if (param_ == nullptr) {
-        return START_ANGLE;
-    }
-
     const auto& range = getRange();
 
     return juce::jmap< float >(static_cast< float >(getValue()), range.getStart(), range.getEnd(), START_ANGLE, END_ANGLE);

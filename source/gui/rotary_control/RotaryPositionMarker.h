@@ -18,15 +18,14 @@ public:
     void parameterValueChanged(int parameter_index, float new_value) override;
     void parameterGestureChanged(int parameter_index, bool gesture_is_starting) override;
 
-protected:
-    [[nodiscard]] virtual float getValueToDraw() const;
+private:
+    [[nodiscard]] float getValueToDraw() const;
 
     static constexpr float START_ANGLE = juce::degreesToRadians(180.f + 45.f);
     static constexpr float END_ANGLE   = juce::degreesToRadians(180.f - 45.f) + juce::MathConstants< float >::twoPi;
 
     juce::RangedAudioParameter* param_;
 
-private:
     typedef juce::AudioProcessorValueTreeState::SliderAttachment ApvtsAttachment;
     std::unique_ptr< ApvtsAttachment >                           slider_attachment_;
 
