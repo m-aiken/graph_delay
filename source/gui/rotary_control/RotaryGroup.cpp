@@ -4,7 +4,7 @@
 /*---------------------------------------------------------------------------
 **
 */
-RotaryGroup::RotaryGroup(juce::AudioProcessorValueTreeState& apvts, const Gui::Params::ParamId& param_id)
+RotaryGroup::RotaryGroup(juce::AudioProcessorValueTreeState& apvts, const GraphDelay::ParamId& param_id)
     : background_image_(
         juce::Drawable::createFromImageData(BinaryData::ellipse_blue_png, BinaryData::ellipse_blue_pngSize))
     , positon_marker_(apvts, param_id)
@@ -43,8 +43,8 @@ RotaryGroup::resized()
 {
     const auto& bounds = getLocalBounds();
 
-    positon_marker_.centreWithSize(Gui::ROTARY_DIAMETER, Gui::ROTARY_DIAMETER);
-    label_.setBounds(0, bounds.getBottom() - Gui::LABEL_HEIGHT, bounds.getWidth(), Gui::LABEL_HEIGHT);
+    positon_marker_.centreWithSize(GraphDelay::ROTARY_DIAMETER, GraphDelay::ROTARY_DIAMETER);
+    label_.setBounds(0, bounds.getBottom() - GraphDelay::LABEL_HEIGHT, bounds.getWidth(), GraphDelay::LABEL_HEIGHT);
 }
 
 /*---------------------------------------------------------------------------

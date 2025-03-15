@@ -123,10 +123,10 @@ PluginProcessor::changeProgramName(int index, const juce::String& new_name)
 void
 PluginProcessor::prepareToPlay(double sample_rate, int samples_per_block)
 {
-    delay_time_      = getParamValue(Gui::Params::TIME);
-    delay_feedback_  = getParamValue(Gui::Params::FEEDBACK);
-    delay_wet_level_ = juce::Decibels::decibelsToGain(getParamValue(Gui::Params::WET_LEVEL));
-    delay_dry_level_ = juce::Decibels::decibelsToGain(getParamValue(Gui::Params::DRY_LEVEL));
+    delay_time_      = getParamValue(GraphDelay::TIME);
+    delay_feedback_  = getParamValue(GraphDelay::FEEDBACK);
+    delay_wet_level_ = juce::Decibels::decibelsToGain(getParamValue(GraphDelay::WET_LEVEL));
+    delay_dry_level_ = juce::Decibels::decibelsToGain(getParamValue(GraphDelay::DRY_LEVEL));
 
     const int input_channels = getTotalNumInputChannels();
 
@@ -193,10 +193,10 @@ PluginProcessor::processBlock(juce::AudioBuffer< float >& buffer, juce::MidiBuff
         for (int sample_index = 0; sample_index < buffer.getNumSamples(); ++sample_index) {
             const float input_sample = buffer.getSample(channel, sample_index);
 
-            delay_time_      = getParamValue(Gui::Params::TIME);
-            delay_feedback_  = getParamValue(Gui::Params::FEEDBACK);
-            delay_wet_level_ = juce::Decibels::decibelsToGain(getParamValue(Gui::Params::WET_LEVEL));
-            delay_dry_level_ = juce::Decibels::decibelsToGain(getParamValue(Gui::Params::DRY_LEVEL));
+            delay_time_      = getParamValue(GraphDelay::TIME);
+            delay_feedback_  = getParamValue(GraphDelay::FEEDBACK);
+            delay_wet_level_ = juce::Decibels::decibelsToGain(getParamValue(GraphDelay::WET_LEVEL));
+            delay_dry_level_ = juce::Decibels::decibelsToGain(getParamValue(GraphDelay::DRY_LEVEL));
 
             smoothed_delay_times_.at(channel).setTargetValue(delay_time_);
             delay_time_ = smoothed_delay_times_.at(channel).getNextValue();
@@ -269,7 +269,7 @@ PluginProcessor::getApvts()
 **
 */
 float
-PluginProcessor::getParamValue(const Gui::Params::ParamId& param_id) const
+PluginProcessor::getParamValue(const GraphDelay::ParamId& param_id) const
 {
     const juce::RangedAudioParameter* param = apvts_.getParameter(param_id);
 
@@ -300,82 +300,38 @@ PluginProcessor::getParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
-    const juce::NormalisableRange< float > time_range(Gui::Params::DELAY_MS_MIN,
-                                                      Gui::Params::DELAY_MS_MAX,
-                                                      Gui::Params::DELAY_INTERVAL);
+    const auto time_range     = juce::NormalisableRange< float >(GraphDelay::DELAY_MS_MIN,
+                                                             GraphDelay::DELAY_MS_MAX,
+                                                             GraphDelay::DELAY_INTERVAL);
+    const auto feedback_range = juce::NormalisableRange< float >(GraphDelay::FEEDBACK_MIN,
+                                                                 GraphDelay::FEEDBACK_MAX,
+                                                                 GraphDelay::FEEDBACK_INTERVAL);
+    const auto wet_range      = juce::NormalisableRange< float >(GraphDelay::DB_MIN,
+                                                            GraphDelay::DB_MAX,
+                                                            GraphDelay::DB_INTERVAL);
+    const auto dry_range      = juce::NormalisableRange< float >(GraphDelay::DB_MIN,
+                                                            GraphDelay::DB_MAX,
+                                                            GraphDelay::DB_INTERVAL);
 
-    const juce::NormalisableRange< float > feedback_range(Gui::Params::FEEDBACK_MIN,
-                                                          Gui::Params::FEEDBACK_MAX,
-                                                          Gui::Params::FEEDBACK_INTERVAL);
-
-    const juce::NormalisableRange< float > wet_range(Gui::Params::DB_MIN, Gui::Params::DB_MAX, Gui::Params::DB_INTERVAL);
-    const juce::NormalisableRange< float > dry_range(Gui::Params::DB_MIN, Gui::Params::DB_MAX, Gui::Params::DB_INTERVAL);
-
-    juce::StringArray interval_choices;
-
-    for (int i = 0; i < Gui::Params::NUM_INTERVALS; ++i) {
-        interval_choices.add(Gui::Params::getIntervalLabel(static_cast< Gui::Params::INTERVAL >(i)));
-    }
-
-    juce::StringArray time_mode_choices;
-
-    for (int i = 0; i < Gui::Params::NUM_TIME_MODE_OPTIONS; ++i) {
-        time_mode_choices.add(Gui::Params::getTimeModeLabel(static_cast< Gui::Params::TIME_MODE_OPTION >(i)));
-    }
-
-    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(Gui::Params::TIME, 1),
-                                                             Gui::Params::TIME,
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(GraphDelay::TIME, 1),
+                                                             GraphDelay::TIME,
                                                              time_range,
-                                                             Gui::Params::DELAY_MS_DEFAULT));
+                                                             GraphDelay::DELAY_MS_DEFAULT));
 
-    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(Gui::Params::FEEDBACK, 1),
-                                                             Gui::Params::FEEDBACK,
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(GraphDelay::FEEDBACK, 1),
+                                                             GraphDelay::FEEDBACK,
                                                              feedback_range,
-                                                             Gui::Params::FEEDBACK_DEFAULT));
+                                                             GraphDelay::FEEDBACK_DEFAULT));
 
-    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(Gui::Params::WET_LEVEL, 1),
-                                                             Gui::Params::WET_LEVEL,
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(GraphDelay::WET_LEVEL, 1),
+                                                             GraphDelay::WET_LEVEL,
                                                              wet_range,
-                                                             Gui::Params::DB_DEFAULT_WET_LEVEL));
+                                                             GraphDelay::DB_DEFAULT_WET_LEVEL));
 
-    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(Gui::Params::DRY_LEVEL, 1),
-                                                             Gui::Params::DRY_LEVEL,
+    layout.add(std::make_unique< juce::AudioParameterFloat >(juce::ParameterID(GraphDelay::DRY_LEVEL, 1),
+                                                             GraphDelay::DRY_LEVEL,
                                                              dry_range,
-                                                             Gui::Params::DB_DEFAULT_DRY_LEVEL));
-
-    layout.add(std::make_unique< juce::AudioParameterChoice >(juce::ParameterID(Gui::Params::TIME_MODE, 1),
-                                                              Gui::Params::TIME_MODE,
-                                                              time_mode_choices,
-                                                              Gui::Params::DEFAULT_TIME_MODE));
-
-    layout.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(Gui::Params::TEMPO, 1),
-                                                           Gui::Params::TEMPO,
-                                                           Gui::Params::TEMPO_MIN,
-                                                           Gui::Params::TEMPO_MAX,
-                                                           Gui::Params::TEMPO_DEFAULT));
-
-    layout.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(Gui::Params::TIME_SIG_NUMERATOR, 1),
-                                                           Gui::Params::TIME_SIG_NUMERATOR,
-                                                           Gui::Params::TIME_SIG_NTOR_MIN,
-                                                           Gui::Params::TIME_SIG_NTOR_MAX,
-                                                           Gui::Params::TIME_SIG_NTOR_DEFAULT));
-
-    layout.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(Gui::Params::TIME_SIG_DENOMINATOR, 1),
-                                                           Gui::Params::TIME_SIG_DENOMINATOR,
-                                                           Gui::Params::TIME_SIG_DTOR_MIN,
-                                                           Gui::Params::TIME_SIG_DTOR_MAX,
-                                                           Gui::Params::TIME_SIG_DTOR_DEFAULT));
-
-    layout.add(std::make_unique< juce::AudioParameterChoice >(juce::ParameterID(Gui::Params::RHYTHMIC_INTERVAL, 1),
-                                                              Gui::Params::RHYTHMIC_INTERVAL,
-                                                              interval_choices,
-                                                              Gui::Params::INTERVAL_1_4));
-
-    layout.add(std::make_unique< juce::AudioParameterInt >(juce::ParameterID(Gui::Params::DISCRETE_TIME, 1),
-                                                           Gui::Params::DISCRETE_TIME,
-                                                           Gui::Params::FIRST_INTERVAL,
-                                                           Gui::Params::LAST_INTERVAL,
-                                                           Gui::Params::INTERVAL_1_4));
+                                                             GraphDelay::DB_DEFAULT_DRY_LEVEL));
 
     return layout;
 }

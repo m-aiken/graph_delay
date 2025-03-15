@@ -9,7 +9,7 @@ class RotaryPositionMarker
     , public juce::AudioProcessorParameter::Listener
 {
 public:
-    RotaryPositionMarker(juce::AudioProcessorValueTreeState& apvts, const Gui::Params::ParamId& param_id);
+    RotaryPositionMarker(juce::AudioProcessorValueTreeState& apvts, const GraphDelay::ParamId& param_id);
     ~RotaryPositionMarker() override;
 
     void paint(juce::Graphics& g) override;

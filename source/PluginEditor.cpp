@@ -9,10 +9,10 @@
 PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p)
     , processor_ref_(p)
-    , time_control_(p.getApvts(), Gui::Params::TIME)
-    , feedback_control_(p.getApvts(), Gui::Params::FEEDBACK)
-    , wet_control_(p.getApvts(), Gui::Params::WET_LEVEL)
-    , dry_control_(p.getApvts(), Gui::Params::DRY_LEVEL)
+    , time_control_(p.getApvts(), GraphDelay::TIME)
+    , feedback_control_(p.getApvts(), GraphDelay::FEEDBACK)
+    , wet_control_(p.getApvts(), GraphDelay::WET_LEVEL)
+    , dry_control_(p.getApvts(), GraphDelay::DRY_LEVEL)
     , xy_graph_(p)
 {
     setLookAndFeel(&lnf_);
@@ -22,15 +22,13 @@ PluginEditor::PluginEditor(PluginProcessor& p)
     addAndMakeVisible(wet_control_);
     addAndMakeVisible(dry_control_);
     addAndMakeVisible(xy_graph_);
-    addAndMakeVisible(interval_buttons_);
-    addAndMakeVisible(interval_combo_box_);
 
     time_control_.getPositionMarker().onValueChange     = [this] { xy_graph_.repaint(); };
     feedback_control_.getPositionMarker().onValueChange = [this] { xy_graph_.repaint(); };
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize(Gui::WINDOW_WIDTH, Gui::WINDOW_HEIGHT);
+    setSize(GraphDelay::WINDOW_WIDTH, GraphDelay::WINDOW_HEIGHT);
 }
 
 /*---------------------------------------------------------------------------
@@ -57,14 +55,14 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
-    xy_graph_.centreWithSize(Gui::GRAPH_DIAMETER, Gui::GRAPH_DIAMETER);
+    xy_graph_.centreWithSize(GraphDelay::GRAPH_DIAMETER, GraphDelay::GRAPH_DIAMETER);
 
     const auto graph_top    = xy_graph_.getY();
     const auto graph_bottom = xy_graph_.getBottom();
     const auto graph_x      = xy_graph_.getX();
     const auto graph_right  = xy_graph_.getRight();
 
-    constexpr auto rotary_group_diameter = Gui::ROTARY_DIAMETER + (Gui::UI_MAGIC_NUMBER * 4);
+    constexpr auto rotary_group_diameter = GraphDelay::ROTARY_DIAMETER + (GraphDelay::UI_MAGIC_NUMBER * 4);
 
     const auto left_rotary_x   = (graph_x - rotary_group_diameter);
     const auto right_rotary_x  = (graph_right);

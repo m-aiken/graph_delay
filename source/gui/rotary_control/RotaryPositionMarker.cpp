@@ -3,7 +3,7 @@
 /*---------------------------------------------------------------------------
 **
 */
-RotaryPositionMarker::RotaryPositionMarker(juce::AudioProcessorValueTreeState& apvts, const Gui::Params::ParamId& param_id)
+RotaryPositionMarker::RotaryPositionMarker(juce::AudioProcessorValueTreeState& apvts, const GraphDelay::ParamId& param_id)
     : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox)
     , param_(apvts.getParameter(param_id))
 {

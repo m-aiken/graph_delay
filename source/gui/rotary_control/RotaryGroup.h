@@ -7,7 +7,7 @@
 class RotaryGroup : public juce::Component
 {
 public:
-    RotaryGroup(juce::AudioProcessorValueTreeState& apvts, const Gui::Params::ParamId& param_id);
+    RotaryGroup(juce::AudioProcessorValueTreeState& apvts, const GraphDelay::ParamId& param_id);
 
     void paint(juce::Graphics& g) override;
     void resized() override;

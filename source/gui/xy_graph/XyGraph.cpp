@@ -22,8 +22,8 @@ XyGraph::paint(juce::Graphics& g)
 {
     const auto thumb_bounds = juce::Rectangle< int >(getXCoordinateFromParameterValue() + THUMB_RADIUS,
                                                      getYCoordinateFromParameterValue() + THUMB_RADIUS,
-                                                     Gui::THUMB_DIAMETER,
-                                                     Gui::THUMB_DIAMETER);
+                                                     GraphDelay::THUMB_DIAMETER,
+                                                     GraphDelay::THUMB_DIAMETER);
 
     thumb_.setBounds(thumb_bounds);
     thumb_shadow_.drawForRectangle(g, thumb_bounds);
@@ -37,7 +37,7 @@ XyGraph::resized()
 {
     const auto bounds = getLocalBounds();
 
-    canvas_.setBounds(bounds.reduced(Gui::UI_MAGIC_NUMBER));
+    canvas_.setBounds(bounds.reduced(GraphDelay::UI_MAGIC_NUMBER));
     overlay_.setBounds(bounds);
 }
 
@@ -47,10 +47,10 @@ XyGraph::resized()
 int
 XyGraph::getXCoordinateFromParameterValue() const
 {
-    const float source_value = processor_ref_.getParamValue(Gui::Params::TIME);
-    const float target_max   = getLocalBounds().reduced(Gui::THUMB_DIAMETER).toFloat().getWidth();
+    const float source_value = processor_ref_.getParamValue(GraphDelay::TIME);
+    const float target_max   = getLocalBounds().reduced(GraphDelay::THUMB_DIAMETER).toFloat().getWidth();
     const auto  coordinate =
-        juce::jmap< float >(source_value, Gui::Params::DELAY_MS_MIN, Gui::Params::DELAY_MS_MAX, 0, target_max);
+        juce::jmap< float >(source_value, GraphDelay::DELAY_MS_MIN, GraphDelay::DELAY_MS_MAX, 0, target_max);
 
     return static_cast< int >(std::floor(coordinate));
 }
@@ -61,10 +61,10 @@ XyGraph::getXCoordinateFromParameterValue() const
 int
 XyGraph::getYCoordinateFromParameterValue() const
 {
-    const float source_value = processor_ref_.getParamValue(Gui::Params::FEEDBACK);
-    const float target_min   = getLocalBounds().reduced(Gui::THUMB_DIAMETER).toFloat().getHeight();
+    const float source_value = processor_ref_.getParamValue(GraphDelay::FEEDBACK);
+    const float target_min   = getLocalBounds().reduced(GraphDelay::THUMB_DIAMETER).toFloat().getHeight();
     const auto  coordinate =
-        juce::jmap< float >(source_value, Gui::Params::FEEDBACK_MIN, Gui::Params::FEEDBACK_MAX, target_min, 0);
+        juce::jmap< float >(source_value, GraphDelay::FEEDBACK_MIN, GraphDelay::FEEDBACK_MAX, target_min, 0);
 
     return static_cast< int >(std::floor(coordinate));
 }

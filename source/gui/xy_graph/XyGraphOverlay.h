@@ -15,8 +15,8 @@ private:
     [[nodiscard]] static float getParameterValueFromXCoordinate(int x_coordinate);
     [[nodiscard]] static float getParameterValueFromYCoordinate(int y_coordinate);
 
-    static constexpr int MIN_VALID_COORDINATE = Gui::THUMB_DIAMETER;
-    static constexpr int MAX_VALID_COORDINATE = Gui::GRAPH_DIAMETER - Gui::THUMB_DIAMETER;
+    static constexpr int MIN_VALID_COORDINATE = GraphDelay::THUMB_DIAMETER;
+    static constexpr int MAX_VALID_COORDINATE = GraphDelay::GRAPH_DIAMETER - GraphDelay::THUMB_DIAMETER;
 
     juce::Value x_;
     juce::Value y_;
