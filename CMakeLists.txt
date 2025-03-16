@@ -40,6 +40,7 @@ set(PROJECT_SOURCES
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
         source/gui/look_and_feel/CustomLookAndFeel.cpp
+        source/gui/rotary_control/RotaryControl.cpp
         source/gui/rotary_control/RotaryGroup.cpp
         source/gui/rotary_control/RotaryPositionMarker.cpp
         source/gui/xy_graph/XyGraph.cpp
@@ -53,6 +54,7 @@ set(PROJECT_HEADERS
         source/PluginProcessor.h
         source/gui/look_and_feel/CustomLookAndFeel.h
         source/gui/look_and_feel/Theme.h
+        source/gui/rotary_control/RotaryControl.h
         source/gui/rotary_control/RotaryGroup.h
         source/gui/rotary_control/RotaryPositionMarker.h
         source/gui/xy_graph/XyGraph.h

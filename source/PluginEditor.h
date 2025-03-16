@@ -20,12 +20,9 @@ private:
     PluginProcessor&  processor_ref_;
     CustomLookAndFeel lnf_;
 
-    RotaryGroup time_control_;
-    RotaryGroup feedback_control_;
+    XyGraph     xy_graph_;
     RotaryGroup wet_control_;
     RotaryGroup dry_control_;
-
-    XyGraph xy_graph_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };

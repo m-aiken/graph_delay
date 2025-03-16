@@ -20,6 +20,8 @@ XyGraphOverlay::mouseDrag(const juce::MouseEvent& event)
 {
     x_ = getParameterValueFromXCoordinate(event.getPosition().getX());
     y_ = getParameterValueFromYCoordinate(event.getPosition().getY());
+
+    repaint();
 }
 
 /*---------------------------------------------------------------------------

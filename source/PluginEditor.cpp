@@ -9,22 +9,15 @@
 PluginEditor::PluginEditor(PluginProcessor& p)
     : AudioProcessorEditor(&p)
     , processor_ref_(p)
-    , time_control_(p.getApvts(), GraphDelay::TIME)
-    , feedback_control_(p.getApvts(), GraphDelay::FEEDBACK)
+    , xy_graph_(p)
     , wet_control_(p.getApvts(), GraphDelay::WET_LEVEL)
     , dry_control_(p.getApvts(), GraphDelay::DRY_LEVEL)
-    , xy_graph_(p)
 {
     setLookAndFeel(&lnf_);
 
-    addAndMakeVisible(time_control_);
-    addAndMakeVisible(feedback_control_);
+    addAndMakeVisible(xy_graph_);
     addAndMakeVisible(wet_control_);
     addAndMakeVisible(dry_control_);
-    addAndMakeVisible(xy_graph_);
-
-    time_control_.getPositionMarker().onValueChange     = [this] { xy_graph_.repaint(); };
-    feedback_control_.getPositionMarker().onValueChange = [this] { xy_graph_.repaint(); };
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -55,24 +48,20 @@ PluginEditor::paint(juce::Graphics& g)
 void
 PluginEditor::resized()
 {
-    xy_graph_.centreWithSize(GraphDelay::GRAPH_DIAMETER, GraphDelay::GRAPH_DIAMETER);
+    const auto& bounds = getLocalBounds();
 
-    const auto graph_top    = xy_graph_.getY();
-    const auto graph_bottom = xy_graph_.getBottom();
-    const auto graph_x      = xy_graph_.getX();
-    const auto graph_right  = xy_graph_.getRight();
+    xy_graph_.setBounds(GraphDelay::UI_PADDING,
+                        GraphDelay::UI_PADDING,
+                        GraphDelay::GRAPH_DIAMETER,
+                        GraphDelay::GRAPH_DIAMETER);
 
-    constexpr auto rotary_group_diameter = GraphDelay::ROTARY_DIAMETER + (GraphDelay::UI_MAGIC_NUMBER * 4);
+    const auto     rotary_x = (bounds.getRight() - GraphDelay::ROTARY_IMAGE_DIAMETER - GraphDelay::UI_PADDING);
+    constexpr auto rotary_group_height = (GraphDelay::ROTARY_IMAGE_DIAMETER + GraphDelay::LABEL_HEIGHT);
+    const auto     top_rotary_y        = xy_graph_.getY();
+    const auto     bottom_rotary_y     = (xy_graph_.getBottom() - rotary_group_height);
 
-    const auto left_rotary_x   = (graph_x - rotary_group_diameter);
-    const auto right_rotary_x  = (graph_right);
-    const auto top_rotary_y    = (graph_top);
-    const auto bottom_rotary_y = (graph_bottom - rotary_group_diameter);
-
-    time_control_.setBounds(left_rotary_x, top_rotary_y, rotary_group_diameter, rotary_group_diameter);
-    feedback_control_.setBounds(left_rotary_x, bottom_rotary_y, rotary_group_diameter, rotary_group_diameter);
-    dry_control_.setBounds(right_rotary_x, top_rotary_y, rotary_group_diameter, rotary_group_diameter);
-    wet_control_.setBounds(right_rotary_x, bottom_rotary_y, rotary_group_diameter, rotary_group_diameter);
+    wet_control_.setBounds(rotary_x, top_rotary_y, GraphDelay::ROTARY_IMAGE_DIAMETER, rotary_group_height);
+    dry_control_.setBounds(rotary_x, bottom_rotary_y, GraphDelay::ROTARY_IMAGE_DIAMETER, rotary_group_height);
 }
 
 /*---------------------------------------------------------------------------

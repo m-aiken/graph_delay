@@ -5,13 +5,15 @@
 namespace GraphDelay
 {
 
-static constexpr int UI_MAGIC_NUMBER = 16;
-static constexpr int WINDOW_WIDTH    = (UI_MAGIC_NUMBER * 42);
-static constexpr int WINDOW_HEIGHT   = (UI_MAGIC_NUMBER * 28);
-static constexpr int GRAPH_DIAMETER  = (UI_MAGIC_NUMBER * 20);
-static constexpr int THUMB_DIAMETER  = (UI_MAGIC_NUMBER * 1);
-static constexpr int ROTARY_DIAMETER = (UI_MAGIC_NUMBER * 6);
-static constexpr int LABEL_HEIGHT    = (UI_MAGIC_NUMBER * 2);
+static constexpr int UI_MAGIC_NUMBER       = 16;
+static constexpr int UI_PADDING            = (UI_MAGIC_NUMBER * 3);
+static constexpr int GRAPH_DIAMETER        = (UI_MAGIC_NUMBER * 20);
+static constexpr int THUMB_DIAMETER        = (UI_MAGIC_NUMBER * 1);
+static constexpr int ROTARY_DIAMETER       = (UI_MAGIC_NUMBER * 6);
+static constexpr int ROTARY_IMAGE_DIAMETER = (ROTARY_DIAMETER + (UI_MAGIC_NUMBER * 2));
+static constexpr int LABEL_HEIGHT          = (UI_MAGIC_NUMBER);
+static constexpr int WINDOW_HEIGHT         = (GRAPH_DIAMETER + (UI_PADDING * 2));
+static constexpr int WINDOW_WIDTH          = (WINDOW_HEIGHT * 2);
 
 typedef juce::String ParamId;
 
